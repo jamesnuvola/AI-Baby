@@ -28,7 +28,7 @@ Questo registro conserva risultati positivi e negativi. Aggiungere nuove prove i
 - **Spazio di ricerca, budget, seed:**
 - **Baseline:**
 - **Metriche sviluppo:**
-- **Metriche test bloccato:
+- **Metriche test bloccato:**
 - **Tempo e risorse:**
 - **Esito e limiti:**
 - **Prossima azione:**
