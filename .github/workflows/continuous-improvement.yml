@@ -46,7 +46,6 @@ jobs:
       - name: Persist report and append-only run history
         if: always()
         env:
-          GH_TOKEN: ${{ github.token }}
           GH_RUN_NUMBER: ${{ github.run_number }}
         run: |
           if [ ! -f reports/benchmark-report.json ]; then
@@ -61,6 +60,8 @@ jobs:
             exit 0
           fi
           git commit -m "ci: record benchmark run ${GH_RUN_NUMBER} [skip ci]"
+          # Another commit may land after checkout. Rebase the report commit before pushing.
+          git pull --rebase origin main
           git push
       - name: Upload latest reproducible report
         if: always()
