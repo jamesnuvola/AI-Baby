@@ -1,0 +1,53 @@
+name: Continuous Improvement Lab
+
+on:
+  schedule:
+    - cron: "37 5 * * *"
+  workflow_dispatch:
+  push:
+    branches: ["main", "master"]
+    paths:
+      - "ai_baby/**"
+      - "scripts/**"
+      - "tests/**"
+      - ".github/workflows/continuous-improvement.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: continuous-improvement-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  benchmark-sweep:
+    name: Reproducible benchmark sweep
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run unit tests first
+        run: python -m unittest discover -s tests -v
+      - name: Run development-budget sweep and held-out evaluation
+        run: python -m scripts.continuous_improvement --output-dir reports
+      - name: Publish report in job summary
+        if: always()
+        run: |
+          if [ -f reports/benchmark-report.md ]; then
+            cat reports/benchmark-report.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Benchmark report was not produced. Inspect the failed step logs." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload reproducible report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-baby-benchmark-report-${{ github.run_number }}
+          path: reports/
+          if-no-files-found: warn
+          retention-days: 90
