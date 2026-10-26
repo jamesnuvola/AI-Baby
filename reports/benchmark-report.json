@@ -1,0 +1,234 @@
+{
+  "budgets": [
+    1000,
+    5000,
+    20000
+  ],
+  "commit": "b55d5075e7ca6164f652bbee628e1079bf0ca3e3",
+  "max_depth": 3,
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15",
+  "results": [
+    {
+      "baseline_last_value_test": {
+        "exact_accuracy": 0.0,
+        "mae": 3.0,
+        "n": 4
+      },
+      "benchmark": "linear_3n_plus_2",
+      "configurations": [
+        {
+          "budget": 1000,
+          "candidate_count": 1000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.575,
+          "selected": "(last + 3)",
+          "selected_complexity": 2,
+          "valid_candidate_count": 1000
+        },
+        {
+          "budget": 5000,
+          "candidate_count": 5000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.642,
+          "selected": "(last + 3)",
+          "selected_complexity": 2,
+          "valid_candidate_count": 5000
+        },
+        {
+          "budget": 20000,
+          "candidate_count": 20000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.964,
+          "selected": "(last + 3)",
+          "selected_complexity": 2,
+          "valid_candidate_count": 20000
+        }
+      ],
+      "development_points": 3,
+      "held_out_test": {
+        "exact_accuracy": 1.0,
+        "mae": 0.0,
+        "n": 4
+      },
+      "held_out_test_points": 4,
+      "next_action": "Add independent seeds and a new held-out benchmark family before claiming generalization.",
+      "selected_configuration": {
+        "budget": 1000,
+        "candidate_count": 1000,
+        "development": {
+          "exact_accuracy": 1.0,
+          "mae": 0.0,
+          "n": 3
+        },
+        "elapsed_seconds": 0.575,
+        "selected": "(last + 3)",
+        "selected_complexity": 2,
+        "valid_candidate_count": 1000
+      },
+      "selection_rule": "development MAE, then lower complexity, then lower budget; held-out test excluded",
+      "sequence_length": 12,
+      "train_end_index": 8
+    },
+    {
+      "baseline_last_value_test": {
+        "exact_accuracy": 0.0,
+        "mae": 18.0,
+        "n": 4
+      },
+      "benchmark": "quadratic_n2_plus_1",
+      "configurations": [
+        {
+          "budget": 1000,
+          "candidate_count": 1000,
+          "development": {
+            "exact_accuracy": 0.0,
+            "mae": 1.2777777777777786,
+            "n": 3
+          },
+          "elapsed_seconds": 0.566,
+          "selected": "(last + mean)",
+          "selected_complexity": 3,
+          "valid_candidate_count": 1000
+        },
+        {
+          "budget": 5000,
+          "candidate_count": 5000,
+          "development": {
+            "exact_accuracy": 0.3333333333333333,
+            "mae": 0.5,
+            "n": 3
+          },
+          "elapsed_seconds": 0.64,
+          "selected": "((2 + 3) * median)",
+          "selected_complexity": 4,
+          "valid_candidate_count": 5000
+        },
+        {
+          "budget": 20000,
+          "candidate_count": 20000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.967,
+          "selected": "((diff1 * 3) + prev(2))",
+          "selected_complexity": 4,
+          "valid_candidate_count": 20000
+        }
+      ],
+      "development_points": 3,
+      "held_out_test": {
+        "exact_accuracy": 1.0,
+        "mae": 0.0,
+        "n": 4
+      },
+      "held_out_test_points": 4,
+      "next_action": "Best development configuration uses the budget ceiling: investigate pruning/search efficiency before increasing compute.",
+      "selected_configuration": {
+        "budget": 20000,
+        "candidate_count": 20000,
+        "development": {
+          "exact_accuracy": 1.0,
+          "mae": 0.0,
+          "n": 3
+        },
+        "elapsed_seconds": 0.967,
+        "selected": "((diff1 * 3) + prev(2))",
+        "selected_complexity": 4,
+        "valid_candidate_count": 20000
+      },
+      "selection_rule": "development MAE, then lower complexity, then lower budget; held-out test excluded",
+      "sequence_length": 12,
+      "train_end_index": 8
+    },
+    {
+      "baseline_last_value_test": {
+        "exact_accuracy": 0.0,
+        "mae": 30.75,
+        "n": 4
+      },
+      "benchmark": "fibonacci",
+      "configurations": [
+        {
+          "budget": 1000,
+          "candidate_count": 1000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.566,
+          "selected": "sum_last2",
+          "selected_complexity": 1,
+          "valid_candidate_count": 1000
+        },
+        {
+          "budget": 5000,
+          "candidate_count": 5000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.639,
+          "selected": "sum_last2",
+          "selected_complexity": 1,
+          "valid_candidate_count": 5000
+        },
+        {
+          "budget": 20000,
+          "candidate_count": 20000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.965,
+          "selected": "sum_last2",
+          "selected_complexity": 1,
+          "valid_candidate_count": 20000
+        }
+      ],
+      "development_points": 3,
+      "held_out_test": {
+        "exact_accuracy": 1.0,
+        "mae": 0.0,
+        "n": 4
+      },
+      "held_out_test_points": 4,
+      "next_action": "Add independent seeds and a new held-out benchmark family before claiming generalization.",
+      "selected_configuration": {
+        "budget": 1000,
+        "candidate_count": 1000,
+        "development": {
+          "exact_accuracy": 1.0,
+          "mae": 0.0,
+          "n": 3
+        },
+        "elapsed_seconds": 0.566,
+        "selected": "sum_last2",
+        "selected_complexity": 1,
+        "valid_candidate_count": 1000
+      },
+      "selection_rule": "development MAE, then lower complexity, then lower budget; held-out test excluded",
+      "sequence_length": 12,
+      "train_end_index": 8
+    }
+  ],
+  "run_label": "4-attempt-1",
+  "run_utc": "2026-10-26T21:05:09.231907+00:00"
+}
