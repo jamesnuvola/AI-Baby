@@ -1,0 +1,6 @@
+[project]
+name = "ai-baby-lab"
+version = "0.2.0"
+description = "Composable hypothesis search and reproducible cognitive experiments"
+requires-python = ">=3.10"
+dependencies = []
