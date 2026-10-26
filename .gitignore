@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+
+# Local experiment state
+*.sqlite
+*.sqlite3
+*.db
+
+# Editors / OS
+.DS_Store
+.vscode/
+.idea/
