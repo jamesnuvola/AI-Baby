@@ -44,3 +44,15 @@ Questo registro conserva risultati positivi e negativi. Aggiungere nuove prove i
 - **Diagnosi:** il budget limitato escludeva la strategia corretta dallo spazio effettivamente esplorato. Non era un fallimento del motore in assoluto, ma una sensibilità sostanziale al budget di ricerca.
 - **Correzione applicata:** il smoke test CI è stato aggiornato da budget 1.000 a 20.000, per esercitare la configurazione che ha superato il benchmark sintetico.
 - **Limiti:** un solo benchmark sintetico e split piccolo; non è evidenza di prestazioni su dati reali. L'esito della CI su GitHub va ancora verificato nella scheda Actions.
+
+## EXP-004 — Configurazione del laboratorio di miglioramento continuo automatico
+
+- **Stato:** workflow e runner pubblicati; esecuzione remota GitHub Actions non ancora verificata tramite lo stato del job.
+- **Automazione:** workflow `Continuous Improvement Lab`, pianificato ogni giorno alle 05:37 UTC, su push rilevanti e avvio manuale.
+- **Copertura:** test unitari, sweep dei budget 1.000 / 5.000 / 20.000 su benchmark sintetici lineare, quadratico e Fibonacci; selezione solo su metriche di sviluppo; test bloccato riportato dopo la selezione.
+- **Dry run locale:** il runner è stato provato con Python 3.13 sul pacchetto starter locale (non su un checkout remoto verificato della revisione GitHub corrente). I 5 test del pacchetto starter sono passati.
+- **Risultati dry run:** lineare — budget 1.000, MAE test 0, baseline 3; quadratico — budget 20.000, MAE test 0, baseline 18; Fibonacci — budget 1.000, MAE test 0, baseline 30,75.
+- **Persistenza:** report Markdown/JSON, storico append-only in `reports/HISTORY.md`, snapshot per esecuzione e artifact conservato per 90 giorni. Il commit automatico dei report dipende dalle policy GitHub e dai permessi effettivi del repository.
+- **Guardrail:** il workflow fallisce se la sentinella quadratica non raggiunge MAE 0 e accuratezza esatta 100%. Il codice del motore non viene modificato né integrato automaticamente; le modifiche algoritmiche richiedono revisione umana.
+- **Limiti:** tutti i benchmark attuali sono sintetici e piccoli; la validazione remota e la persistenza via bot devono ancora essere confermate in Actions.
+- **Prossima azione:** controllare la prima esecuzione del workflow, correggere eventuali errori di runner/permessi e verificare la creazione del primo report persistente.
