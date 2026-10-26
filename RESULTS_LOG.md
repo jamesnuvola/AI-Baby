@@ -56,3 +56,16 @@ Questo registro conserva risultati positivi e negativi. Aggiungere nuove prove i
 - **Guardrail:** il workflow fallisce se la sentinella quadratica non raggiunge MAE 0 e accuratezza esatta 100%. Il codice del motore non viene modificato né integrato automaticamente; le modifiche algoritmiche richiedono revisione umana.
 - **Limiti:** tutti i benchmark attuali sono sintetici e piccoli; la validazione remota e la persistenza via bot devono ancora essere confermate in Actions.
 - **Prossima azione:** controllare la prima esecuzione del workflow, correggere eventuali errori di runner/permessi e verificare la creazione del primo report persistente.
+
+## EXP-005 — Validazione remota del ciclo automatico e correzione della persistenza
+
+- **Stato:** workflow GitHub Actions verificato con esito positivo il 2026-10-26.
+- **CI:** run #29 completato con esito `success` sul commit `b55d5075e7ca6164f652bbee628e1079bf0ca3e3`.
+- **Continuous Improvement Lab:** run #4 completato con esito `success` sullo stesso commit; test unitari, sweep, riepilogo, persistenza del report e upload artifact tutti completati.
+- **Esito benchmark remoto (Python 3.12.15):** lineare — budget 1.000, dev MAE 0, test MAE 0, baseline test MAE 3; quadratico — budget 20.000, dev MAE 0, test MAE 0, baseline 18; Fibonacci — budget 1.000, dev MAE 0, test MAE 0, baseline 30,75.
+- **Diagnosi del primo tentativo di persistenza:** run #3 ha completato i benchmark ma il push del report è stato respinto perché `main` era avanzato dopo il checkout. L'artifact è stato comunque caricato.
+- **Correzione:** aggiunto `git pull --rebase origin main` prima del push del report.
+- **Verifica della correzione:** run #4 ha superato anche il passaggio di persistenza. Commit automatico creato: `5b3eb0a507ba8d41e759ec4deb47d3ca25cc6ded`, messaggio `ci: record benchmark run 4 [skip ci]`.
+- **Prova persistente:** `reports/HISTORY.md`, `reports/benchmark-report.md` e `reports/history/run-4-attempt-1.json` sono presenti su GitHub; artifact `ai-baby-benchmark-report-4` caricato e non scaduto alla verifica.
+- **Limiti:** test sintetici piccoli; la selezione di budget usa metriche di sviluppo, ma sono necessari più semi indipendenti e nuovi casi per valutare robustezza e generalizzazione.
+- **Prossima azione prioritaria:** estendere la suite a più varianti indipendenti e metriche aggregate, mantenendo il codice del motore protetto da modifiche automatiche non revisionate.
