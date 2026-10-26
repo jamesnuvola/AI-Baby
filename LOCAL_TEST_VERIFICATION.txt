@@ -1,0 +1,4 @@
+Verifica eseguita sul pacchetto starter locale prima del caricamento su GitHub.
+Comando: python -m unittest discover -s tests -v
+Esito: 5 test superati, 0 falliti.
+Questa verifica è locale e non costituisce prova di un'esecuzione GitHub Actions. La CI sarà verificabile solo dopo il push dei file e l'esecuzione del workflow.
