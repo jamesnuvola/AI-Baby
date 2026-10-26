@@ -32,3 +32,15 @@ Questo registro conserva risultati positivi e negativi. Aggiungere nuove prove i
 - **Tempo e risorse:**
 - **Esito e limiti:**
 - **Prossima azione:**
+
+## EXP-003 — Diagnosi della sensibilità al budget di ricerca
+
+- **Stato:** eseguito localmente il 2026-10-26; il codice e i test sono stati scaricati dal pacchetto starter e rieseguiti localmente.
+- **Ambiente:** Python 3.13.
+- **Test unitari:** 5/5 superati in 1,376 s.
+- **Sequenza:** stessa sequenza sintetica quadratica dell'EXP-002; split invariato (3 punti sviluppo, 4 punti test).
+- **Budget 1.000:** strategia selezionata `(last + mean)`; MAE sviluppo 1,2778; MAE test 8,9167; accuratezza esatta test 0%; baseline “ripeti ultimo valore” MAE test 18,0.
+- **Budget 20.000:** strategia selezionata `((diff1 * 3) + prev(2))`; MAE sviluppo 0; MAE test 0; accuratezza esatta test 100%; baseline MAE test 18,0.
+- **Diagnosi:** il budget limitato escludeva la strategia corretta dallo spazio effettivamente esplorato. Non era un fallimento del motore in assoluto, ma una sensibilità sostanziale al budget di ricerca.
+- **Correzione applicata:** il smoke test CI è stato aggiornato da budget 1.000 a 20.000, per esercitare la configurazione che ha superato il benchmark sintetico.
+- **Limiti:** un solo benchmark sintetico e split piccolo; non è evidenza di prestazioni su dati reali. L'esito della CI su GitHub va ancora verificato nella scheda Actions.
