@@ -1,7 +1,8 @@
 """Automated, deterministic benchmark sweep for AI Baby.
 
-The development window selects a configuration. Held-out test metrics are emitted
-only for the selected configuration and never used for selection.
+Development metrics select a configuration. Held-out metrics are reported only
+for that configuration and never influence the selection. Source code is never
+modified automatically; algorithm changes require a reviewed pull request.
 """
 from __future__ import annotations
 
@@ -34,6 +35,19 @@ def benchmark_cases():
     }
 
 
+def next_action(item, max_budget):
+    test = item["held_out_test"] or {}
+    baseline = item["baseline_last_value_test"] or {}
+    budget = item["selected_configuration"]["budget"]
+    if test.get("mae") is None:
+        return "No valid held-out result: inspect candidate evaluation and DSL coverage."
+    if test["mae"] > baseline.get("mae", float("inf")):
+        return "Regression versus last-value baseline: diagnose the benchmark and candidate ranking before promoting changes."
+    if budget == max_budget:
+        return "Best development configuration uses the budget ceiling: investigate pruning/search efficiency before increasing compute."
+    return "Add independent seeds and a new held-out benchmark family before claiming generalization."
+
+
 def run_sweep(budgets=BUDGETS):
     results = []
     for name, sequence in benchmark_cases().items():
@@ -52,14 +66,14 @@ def run_sweep(budgets=BUDGETS):
                 "elapsed_seconds": round(elapsed, 3),
             })
         # Selection uses development data only; tie-break toward lower complexity,
-        # then lower compute budget. Test metrics do not influence this choice.
+        # then lower compute budget. Held-out test metrics do not influence choice.
         winner = min(configurations, key=lambda row: (
             row["development"]["mae"],
             row["selected_complexity"],
             row["budget"],
         ))
         final = search(sequence, train_end=TRAIN_END, max_depth=MAX_DEPTH, budget=winner["budget"])
-        results.append({
+        item = {
             "benchmark": name,
             "sequence_length": len(sequence),
             "train_end_index": TRAIN_END,
@@ -70,7 +84,9 @@ def run_sweep(budgets=BUDGETS):
             "held_out_test": final["test"],
             "baseline_last_value_test": final["baseline_test"],
             "selection_rule": "development MAE, then lower complexity, then lower budget; held-out test excluded",
-        })
+        }
+        item["next_action"] = next_action(item, max(budgets))
+        results.append(item)
     return results
 
 
@@ -80,6 +96,7 @@ def render_markdown(payload):
         "",
         f"- Run UTC: {payload['run_utc']}",
         f"- Commit: `{payload['commit']}`",
+        f"- Run: `{payload['run_label']}`",
         f"- Python: {payload['python']}",
         f"- Platform: {payload['platform']}",
         f"- Search depth: {payload['max_depth']}",
@@ -100,15 +117,18 @@ def render_markdown(payload):
             f"| {baseline.get('mae', float('nan')):.6g} "
             f"| {test.get('exact_accuracy', float('nan')):.1%} |"
         )
+    lines += ["", "## Diagnosi e prossima azione", ""]
+    for item in payload["results"]:
+        lines.append(f"- **{item['benchmark']}**: {item['next_action']}")
     lines += [
         "",
-        "## Interpretation and safety",
+        "## Interpretazione e limiti",
         "",
-        "- Configurations are selected using development metrics only; the held-out test is not used to choose a budget.",
-        "- The quadratic benchmark is a synthetic regression sentinel, not evidence of real-world predictive ability.",
-        "- Linear and Fibonacci cases are exploratory diagnostics; their scores are reported without claiming generalization.",
-        "- This workflow does not modify source code or merge changes. Any proposed algorithm change requires a reviewed pull request.",
-        "- Full per-configuration development metrics and selected-config test metrics are in `benchmark-report.json`.",
+        "- Le configurazioni sono selezionate usando soltanto metriche di sviluppo; il test bloccato non sceglie il budget.",
+        "- Il benchmark quadratico è un controllo di regressione sintetico, non una prova di capacità predittiva nel mondo reale.",
+        "- I casi lineare e Fibonacci sono diagnostici esplorativi; non autorizzano affermazioni di generalizzazione.",
+        "- Il workflow non modifica il codice sorgente né integra modifiche automaticamente. Ogni cambiamento dell'algoritmo richiede una pull request revisionata.",
+        "- I dettagli completi sono nel JSON allegato.",
         "",
     ]
     return "\n".join(lines)
@@ -122,8 +142,13 @@ def main():
     budgets = tuple(sorted({int(v.strip()) for v in args.budgets.split(",") if v.strip()}))
     if not budgets or any(v < 1 for v in budgets):
         parser.error("Budgets must be positive integers.")
+    now = datetime.now(timezone.utc)
+    run_number = os.environ.get("GITHUB_RUN_NUMBER", now.strftime("%Y%m%dT%H%M%SZ"))
+    run_attempt = os.environ.get("GITHUB_RUN_ATTEMPT", "1")
+    run_label = f"{run_number}-attempt-{run_attempt}"
     payload = {
-        "run_utc": datetime.now(timezone.utc).isoformat(),
+        "run_utc": now.isoformat(),
+        "run_label": run_label,
         "commit": os.environ.get("GITHUB_SHA", "local"),
         "python": sys.version.split()[0],
         "platform": platform.platform(),
@@ -132,10 +157,26 @@ def main():
         "results": run_sweep(budgets),
     }
     out = Path(args.output_dir)
-    out.mkdir(parents=True, exist_ok=True)
-    (out / "benchmark-report.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    (out / "benchmark-report.md").write_text(render_markdown(payload) + "\n", encoding="utf-8")
-    print(render_markdown(payload))
+    history = out / "history"
+    history.mkdir(parents=True, exist_ok=True)
+    json_text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    markdown_text = render_markdown(payload) + "\n"
+    (out / "benchmark-report.json").write_text(json_text, encoding="utf-8")
+    (out / "benchmark-report.md").write_text(markdown_text, encoding="utf-8")
+    (history / f"run-{run_label}.json").write_text(json_text, encoding="utf-8")
+    (history / f"run-{run_label}.md").write_text(markdown_text, encoding="utf-8")
+    history_index = out / "HISTORY.md"
+    with history_index.open("a", encoding="utf-8") as stream:
+        stream.write(f"\n## Run {run_label} — {now.isoformat()}\n\n")
+        for item in payload["results"]:
+            dev = item["selected_configuration"]["development"]
+            test = item["held_out_test"] or {}
+            stream.write(
+                f"- **{item['benchmark']}** — budget {item['selected_configuration']['budget']}; "
+                f"dev MAE {dev['mae']:.6g}; test MAE {test.get('mae', float('nan')):.6g}; "
+                f"next: {item['next_action']}\n"
+            )
+    print(markdown_text)
     # Fail loudly if the canonical quadratic regression sentinel breaks.
     quadratic = next(row for row in payload["results"] if row["benchmark"] == "quadratic_n2_plus_1")
     test = quadratic["held_out_test"] or {}
