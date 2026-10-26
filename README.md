@@ -22,6 +22,18 @@ Apri **Code → Codespaces → Create codespace on main**. Nel terminale esegui 
 
 Il workflow `.github/workflows/ci.yml` esegue test e smoke test con Python 3.10–3.13 su push, pull request e avvio manuale. Verificare lo stato reale nella scheda **Actions**: la presenza del file non garantisce che ogni esecuzione sia passata.
 
+## Miglioramento continuo automatico
+
+Il workflow **Continuous Improvement Lab** esegue unit test e una ricerca riproducibile su tre benchmark sintetici (lineare, quadratico, Fibonacci), confrontando budget di 1.000, 5.000 e 20.000 candidati. Viene eseguito ogni giorno alle 05:37 UTC, quando si modificano codice/test rilevanti e manualmente da [GitHub Actions](https://github.com/jamesnuvola/AI-Baby/actions/workflows/continuous-improvement.yml).
+
+- Sceglie il budget usando solo le metriche di sviluppo; il test bloccato non determina la selezione.
+- Pubblica un riepilogo nel job e carica JSON/Markdown come artifact per 90 giorni.
+- Salva anche report e storico append-only in `reports/` tramite un commit del bot, se le policy del repository consentono il push.
+- Fallisce sul benchmark quadratico se la regressione sentinella non mantiene MAE 0 e accuratezza esatta 100%.
+- Non modifica automaticamente il motore e non fa merge: le modifiche algoritmiche richiedono revisione umana.
+
+Il workflow è stato aggiunto e il suo file è stato verificato nella repository. L'esecuzione remota va considerata confermata solo dopo aver controllato lo stato del job nella scheda Actions.
+
 ## Registro degli esperimenti
 
 - `RESULTS_LOG.md`: risultati storici e modello per gli esperimenti successivi.
