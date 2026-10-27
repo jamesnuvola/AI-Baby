@@ -45,7 +45,7 @@ Ogni prova dovrebbe riportare commit, dati, split, budget, baseline, metriche, r
 
 ## Limiti tecnici
 
-- Spazio di ricerca circoscritto al DSL nel codice.
+- Spazio di ricerca circoscritto al DSL nel codice; il candidato newton3 applica l'estrapolazione alle differenze finite fino al terzo ordine e va valutato contro le altre famiglie, non assunto come sempre corretto.
 - Nessun LLM collegato nella v0.2.
 - La memoria SQLite è locale, salvo esportazione esplicita; codice e registro Markdown sono versionabili.
 - Non inserire chiavi API, password, dati personali o segreti in un repository pubblico.
