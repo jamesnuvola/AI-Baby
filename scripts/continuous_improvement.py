@@ -99,6 +99,9 @@ def run_sweep(budgets=BUDGETS, seeds=SEEDS):
         results.append(item)
     return results
 
+def _fmt(value, spec=".6g"):
+    return "n/a" if value is None else format(value, spec)
+
 def render_markdown(payload):
     lines = [
         "# AI Baby — automatic improvement report", "",
@@ -114,8 +117,8 @@ def render_markdown(payload):
     for item in payload["results"]:
         test, baseline = item["aggregate_test"], item["aggregate_baseline_test"]
         lines.append(f"| {item['benchmark']} | {item['selected_configuration']['budget']} "
-                     f"| {test['mean']:.6g} | {test['worst']:.6g} "
-                     f"| {test['exact_accuracy']:.1%} | {baseline['mean']:.6g} |")
+                     f"| {_fmt(test['mean'])} | {_fmt(test['worst'])} "
+                     f"| {_fmt(test['exact_accuracy'], '.1%')} | {_fmt(baseline['mean'])} |")
     lines += ["", "## Per-family diagnosis and next action", ""]
     for item in payload["results"]:
         lines.append(f"- **{item['benchmark']}**: {item['next_action']}")
@@ -165,7 +168,7 @@ def main():
         for item in payload["results"]:
             test = item["aggregate_test"]
             stream.write(f"- **{item['benchmark']}** — frozen budget {item['selected_configuration']['budget']}; "
-                         f"mean test MAE {test['mean']:.6g}; worst-seed MAE {test['worst']:.6g}; "
+                         f"mean test MAE {_fmt(test['mean'])}; worst-seed MAE {_fmt(test['worst'])}; "
                          f"next: {item['next_action']}\n")
     print(markdown_text)
     quadratic = next(row for row in payload["results"] if row["benchmark"] == "quadratic")
