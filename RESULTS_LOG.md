@@ -88,3 +88,14 @@ Questo registro conserva risultati positivi e negativi. Aggiungere nuove prove i
 - **Diagnosi successiva:** il caso quadratico sceglie ancora il tetto di budget 20.000; il prossimo esperimento deve analizzare l'efficienza della ricerca e le cause del fallimento cubico, senza adattare il motore al test bloccato.
 - **Limiti:** tre semi sintetici per famiglia non equivalgono a dati reali indipendenti e non provano generalizzazione nel mondo reale. Il test cubico è diagnostico e non ha influenzato la selezione.
 - **Report persistente:** `reports/benchmark-report.md`, `reports/benchmark-report.json`, `reports/HISTORY.md` e snapshot per-run sotto `reports/history/`.
+
+
+## EXP-007 — Diagnosi del limite cubico e candidato Newton di terzo ordine
+
+- **Stato:** ipotesi implementata su branch sperimentale; in attesa di test CI e benchmark completi.
+- **Motivazione verificata in EXP-006:** il cubico ha avuto MAE test 125,125; il candidato selezionato è stato `((diff1 * 3) + mean)`, con accuratezza esatta 0%. Il DSL non offriva un candidato atomico di estrapolazione tramite differenze finite fino al terzo ordine.
+- **Ipotesi:** un operatore generale `newton3`, basato sugli ultimi quattro valori e sulla somma delle differenze finite di ordine 1, 2 e 3, dovrebbe estrapolare esattamente sequenze polinomiali fino al terzo grado senza dipendere da un caso specifico o da un test set.
+- **Modifica candidata:** aggiungere `newton3` al DSL e allo spazio dei candidati; non cambiare il criterio di selezione (MAE di sviluppo, complessità, budget).
+- **Test richiesti:** verifica matematica su cubici con tre offset, errore su storia insufficiente, ricerca end-to-end su cubico sintetico e regressione sulle altre famiglie.
+- **Criterio di accettazione:** il candidato deve prevedere il cubico esattamente nel test bloccato e non deve rompere la sentinella quadratica o i test esistenti.
+- **Limite:** anche se supera i benchmark sintetici, `newton3` non prova capacità su dati reali; è un bias matematico esplicito da valutare con confronti e casi non polinomiali.
