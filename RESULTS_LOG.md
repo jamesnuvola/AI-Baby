@@ -92,10 +92,20 @@ Questo registro conserva risultati positivi e negativi. Aggiungere nuove prove i
 
 ## EXP-007 — Diagnosi del limite cubico e candidato Newton di terzo ordine
 
-- **Stato:** ipotesi implementata su branch sperimentale; in attesa di test CI e benchmark completi.
-- **Motivazione verificata in EXP-006:** il cubico ha avuto MAE test 125,125; il candidato selezionato è stato `((diff1 * 3) + mean)`, con accuratezza esatta 0%. Il DSL non offriva un candidato atomico di estrapolazione tramite differenze finite fino al terzo ordine.
-- **Ipotesi:** un operatore generale `newton3`, basato sugli ultimi quattro valori e sulla somma delle differenze finite di ordine 1, 2 e 3, dovrebbe estrapolare esattamente sequenze polinomiali fino al terzo grado senza dipendere da un caso specifico o da un test set.
-- **Modifica candidata:** aggiungere `newton3` al DSL e allo spazio dei candidati; non cambiare il criterio di selezione (MAE di sviluppo, complessità, budget).
-- **Test richiesti:** verifica matematica su cubici con tre offset, errore su storia insufficiente, ricerca end-to-end su cubico sintetico e regressione sulle altre famiglie.
-- **Criterio di accettazione:** il candidato deve prevedere il cubico esattamente nel test bloccato e non deve rompere la sentinella quadratica o i test esistenti.
-- **Limite:** anche se supera i benchmark sintetici, `newton3` non prova capacità su dati reali; è un bias matematico esplicito da valutare con confronti e casi non polinomiali.
+- **Stato:** completato; CI e Continuous Improvement Lab superati il 2026-10-27.
+- **Commit testato:** `a1cbdcccd70aa2c767ab3d47567df3d7f0294e80`.
+- **CI:** run #36; i test e lo smoke test multi-seed sono stati eseguiti su Python 3.10–3.13.
+- **Continuous Improvement Lab:** run #6 completato con esito `success`; report e storico persistiti su GitHub.
+- **Motivazione:** EXP-006 aveva mostrato un MAE cubico di 125,125 e accuratezza esatta 0%; il candidato migliore disponibile era `((diff1 * 3) + mean)`.
+- **Correzione:** aggiunto il candidato generale `newton3`, che estrapola usando le differenze finite di ordine 1, 2 e 3 degli ultimi quattro valori. Il criterio di selezione resta invariato.
+- **Test unitari:** verificata l'estrapolazione su cubici con offset 0, 1 e 2 e il rifiuto di una storia troppo corta; il test end-to-end trova `newton3` e ottiene MAE test 0.
+- **Risultati benchmark multi-seed (semi 0, 1, 2):**
+  - Lineare — budget 1.000; MAE test medio 0; accuratezza esatta 100%; baseline MAE 4.
+  - Quadratica — budget 1.000; MAE test medio 0; accuratezza esatta 100%; baseline MAE 19.
+  - Fibonacci — budget 1.000; MAE test medio 0; accuratezza esatta 100%; baseline MAE 61,5.
+  - Geometrica — budget 1.000; MAE test medio 0; accuratezza esatta 100%; baseline MAE 960.
+  - Cubica diagnostica — budget 1.000; MAE test medio 0; accuratezza esatta 100%; baseline MAE 247.
+- **Miglioramento osservato:** tutte e cinque le famiglie sintetiche sono state previste esattamente su tutti e tre i semi, e il budget selezionato per il caso quadratico è sceso da 20.000 a 1.000.
+- **Limiti:** risultato circoscritto a cinque famiglie sintetiche e tre varianti ciascuna; non dimostra generalizzazione su dati reali o sequenze rumorose/non polinomiali. `newton3` è un bias matematico esplicito, non auto-riprogrammazione.
+- **Report persistente:** `reports/benchmark-report.md`, `reports/benchmark-report.json`, `reports/HISTORY.md` e snapshot `reports/history/run-6-attempt-1.*`.
+- **Prossimo esperimento prioritario:** test di stress su sequenze rumorose, cambi di regime e famiglie non polinomiali, per misurare quando `newton3` aiuta e quando porta a sovraestrapolazione; mantenere separati sviluppo e test bloccato.
