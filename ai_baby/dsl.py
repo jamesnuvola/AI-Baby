@@ -13,7 +13,7 @@ class Expr:
             return str(self.args[0])
         if self.op == "prev":
             return f"prev({self.args[0]})"
-        if self.op in {"last", "diff1", "diff2", "mean", "median", "sum_last2"}:
+        if self.op in {"last", "diff1", "diff2", "mean", "median", "sum_last2", "newton3"}:
             return self.op
         symbols = {"add": "+", "sub": "-", "mul": "*"}
         if self.op in symbols:
@@ -47,6 +47,14 @@ class Expr:
             if len(xs) < 3:
                 raise ValueError("Storia insufficiente per diff2.")
             return float(xs[-1] - 2 * xs[-2] + xs[-3])
+        if self.op == "newton3":
+            if len(xs) < 4:
+                raise ValueError("Storia insufficiente per newton3.")
+            a, b, c, d = map(float, xs[-4:])
+            first = d - c
+            second = d - 2 * c + b
+            third = d - 3 * c + 3 * b - a
+            return float(d + first + second + third)
         if self.op == "mean":
             return float(mean(xs))
         if self.op == "median":
@@ -70,7 +78,7 @@ class Expr:
         raise ValueError(f"Operatore non supportato: {self.op}")
 
 def base_expressions(max_prev: int = 4, constants: range = range(-3, 4)) -> list[Expr]:
-    exprs = [Expr(op) for op in ("last", "diff1", "diff2", "mean", "median", "sum_last2")]
+    exprs = [Expr(op) for op in ("last", "diff1", "diff2", "mean", "median", "sum_last2", "newton3")]
     exprs += [Expr("prev", (k,)) for k in range(1, max_prev + 1)]
     exprs += [Expr("const", (c,)) for c in constants]
     return exprs
