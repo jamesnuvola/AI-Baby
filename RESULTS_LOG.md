@@ -69,3 +69,16 @@ Questo registro conserva risultati positivi e negativi. Aggiungere nuove prove i
 - **Prova persistente:** `reports/HISTORY.md`, `reports/benchmark-report.md` e `reports/history/run-4-attempt-1.json` sono presenti su GitHub; artifact `ai-baby-benchmark-report-4` caricato e non scaduto alla verifica.
 - **Limiti:** test sintetici piccoli; la selezione di budget usa metriche di sviluppo, ma sono necessari più semi indipendenti e nuovi casi per valutare robustezza e generalizzazione.
 - **Prossima azione prioritaria:** estendere la suite a più varianti indipendenti e metriche aggregate, mantenendo il codice del motore protetto da modifiche automatiche non revisionate.
+
+## EXP-006 — Suite multi-seed e famiglie diagnostiche aggiuntive
+
+- **Stato:** implementazione candidata su branch dedicato; validazione remota in attesa della CI della pull request.
+- **Ipotesi:** risultati perfetti su tre sequenze fisse potrebbero dipendere da un benchmark troppo ristretto; varianti con semi fissati e famiglie differenti rendono visibili fragilità del motore.
+- **Modifica proposta:** sweep dei budget 1.000 / 5.000 / 20.000 soltanto sul seed 0; congelamento del budget selezionato usando esclusivamente le metriche di sviluppo; valutazione sugli stessi split di tre semi (0, 1, 2) per famiglia.
+- **Famiglie:** lineare, quadratica, Fibonacci, geometrica e cubica diagnostica.
+- **Metriche aggregate:** MAE medio, MAE del seed peggiore, accuratezza esatta media e confronto con la baseline “ripeti l'ultimo valore”; dettaglio e tempi per ogni seed nel JSON.
+- **Guardrail:** la sentinella quadratica deve rimanere esatta su tutti i semi. Il caso cubico è diagnostico e un errore va riportato, non nascosto né usato per selezionare la configurazione.
+- **Prevenzione leakage:** i semi 1 e 2 non partecipano alla selezione del budget; nessuna metrica del test determina la scelta.
+- **Limiti:** le varianti sintetiche non sono dati reali indipendenti; un successo non dimostra generalizzazione. I risultati numerici vanno aggiunti solo dopo l'esecuzione verificata della CI.
+- **Prossimo passo:** verificare test e report con GitHub Actions, correggere eventuali regressioni e registrare i risultati effettivamente osservati.
+
