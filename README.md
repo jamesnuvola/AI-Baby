@@ -26,7 +26,8 @@ Il workflow `.github/workflows/ci.yml` esegue test e smoke test con Python 3.10�
 
 Il workflow **Continuous Improvement Lab** esegue unit test e una ricerca riproducibile su tre benchmark sintetici (lineare, quadratico, Fibonacci), confrontando budget di 1.000, 5.000 e 20.000 candidati. Viene eseguito ogni giorno alle 05:37 UTC, quando si modificano codice/test rilevanti e manualmente da [GitHub Actions](https://github.com/jamesnuvola/AI-Baby/actions/workflows/continuous-improvement.yml).
 
-- Sceglie il budget usando solo le metriche di sviluppo; il test bloccato non determina la selezione.
+- Sceglie il budget usando solo le metriche di sviluppo del seed 0; i semi 1 e 2 sono controlli di robustezza a budget congelato e nessuna metrica di test determina la selezione.
+- Riporta MAE medio e peggiore tra i semi, accuratezza esatta media, baseline e dettagli per seed; il caso cubico è diagnostico e può evidenziare limiti del DSL.
 - Pubblica un riepilogo nel job e carica JSON/Markdown come artifact per 90 giorni.
 - Salva anche report e storico append-only in `reports/` tramite un commit del bot, se le policy del repository consentono il push.
 - Fallisce sul benchmark quadratico se la regressione sentinella non mantiene MAE 0 e accuratezza esatta 100%.
