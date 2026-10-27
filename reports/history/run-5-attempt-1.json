@@ -1,0 +1,665 @@
+{
+  "budgets": [
+    1000,
+    5000,
+    20000
+  ],
+  "commit": "f2f78fb8045fe82bab5b65192a2738b40201d857",
+  "max_depth": 3,
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15",
+  "results": [
+    {
+      "aggregate_baseline_test": {
+        "exact_accuracy": 0.0,
+        "mae": 4.0,
+        "mean": 4.0,
+        "n": 3,
+        "worst": 5.0
+      },
+      "aggregate_test": {
+        "exact_accuracy": 1.0,
+        "mae": 0.0,
+        "mean": 0.0,
+        "n": 3,
+        "worst": 0.0
+      },
+      "benchmark": "linear",
+      "configurations": [
+        {
+          "budget": 1000,
+          "candidate_count": 1000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.459,
+          "selected": "(last + 3)",
+          "selected_complexity": 2,
+          "valid_candidate_count": 1000
+        },
+        {
+          "budget": 5000,
+          "candidate_count": 5000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.503,
+          "selected": "(last + 3)",
+          "selected_complexity": 2,
+          "valid_candidate_count": 5000
+        },
+        {
+          "budget": 20000,
+          "candidate_count": 20000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.768,
+          "selected": "(last + 3)",
+          "selected_complexity": 2,
+          "valid_candidate_count": 20000
+        }
+      ],
+      "development_points": 3,
+      "held_out_test_points": 4,
+      "next_action": "Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.",
+      "per_seed_results": [
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 3.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.456,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 0,
+          "selected_expression": "(last + 3)"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 4.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.46,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 1,
+          "selected_expression": "(last + diff1)"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 5.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.459,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 2,
+          "selected_expression": "(last + diff1)"
+        }
+      ],
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "selected_configuration": {
+        "budget": 1000,
+        "candidate_count": 1000,
+        "development": {
+          "exact_accuracy": 1.0,
+          "mae": 0.0,
+          "n": 3
+        },
+        "elapsed_seconds": 0.459,
+        "selected": "(last + 3)",
+        "selected_complexity": 2,
+        "valid_candidate_count": 1000
+      },
+      "selection_rule": "seed-0 development MAE, then lower complexity, then lower budget; all held-out test metrics excluded",
+      "sequence_length": 12,
+      "train_end_index": 8
+    },
+    {
+      "aggregate_baseline_test": {
+        "exact_accuracy": 0.0,
+        "mae": 19.0,
+        "mean": 19.0,
+        "n": 3,
+        "worst": 20.0
+      },
+      "aggregate_test": {
+        "exact_accuracy": 1.0,
+        "mae": 0.0,
+        "mean": 0.0,
+        "n": 3,
+        "worst": 0.0
+      },
+      "benchmark": "quadratic",
+      "configurations": [
+        {
+          "budget": 1000,
+          "candidate_count": 1000,
+          "development": {
+            "exact_accuracy": 0.0,
+            "mae": 1.2777777777777786,
+            "n": 3
+          },
+          "elapsed_seconds": 0.461,
+          "selected": "(last + mean)",
+          "selected_complexity": 3,
+          "valid_candidate_count": 1000
+        },
+        {
+          "budget": 5000,
+          "candidate_count": 5000,
+          "development": {
+            "exact_accuracy": 0.3333333333333333,
+            "mae": 0.5,
+            "n": 3
+          },
+          "elapsed_seconds": 0.529,
+          "selected": "((2 + 3) * median)",
+          "selected_complexity": 4,
+          "valid_candidate_count": 5000
+        },
+        {
+          "budget": 20000,
+          "candidate_count": 20000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.786,
+          "selected": "((diff1 * 3) + prev(2))",
+          "selected_complexity": 4,
+          "valid_candidate_count": 20000
+        }
+      ],
+      "development_points": 3,
+      "held_out_test_points": 4,
+      "next_action": "Selected budget reaches the ceiling: investigate pruning/search efficiency before increasing compute.",
+      "per_seed_results": [
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 18.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.781,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 0,
+          "selected_expression": "((diff1 * 3) + prev(2))"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 19.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.769,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 1,
+          "selected_expression": "((diff1 * 3) + prev(2))"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 20.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.767,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 2,
+          "selected_expression": "((diff1 * 3) + prev(2))"
+        }
+      ],
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "selected_configuration": {
+        "budget": 20000,
+        "candidate_count": 20000,
+        "development": {
+          "exact_accuracy": 1.0,
+          "mae": 0.0,
+          "n": 3
+        },
+        "elapsed_seconds": 0.786,
+        "selected": "((diff1 * 3) + prev(2))",
+        "selected_complexity": 4,
+        "valid_candidate_count": 20000
+      },
+      "selection_rule": "seed-0 development MAE, then lower complexity, then lower budget; all held-out test metrics excluded",
+      "sequence_length": 12,
+      "train_end_index": 8
+    },
+    {
+      "aggregate_baseline_test": {
+        "exact_accuracy": 0.0,
+        "mae": 61.5,
+        "mean": 61.5,
+        "n": 3,
+        "worst": 92.25
+      },
+      "aggregate_test": {
+        "exact_accuracy": 1.0,
+        "mae": 0.0,
+        "mean": 0.0,
+        "n": 3,
+        "worst": 0.0
+      },
+      "benchmark": "fibonacci",
+      "configurations": [
+        {
+          "budget": 1000,
+          "candidate_count": 1000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.45,
+          "selected": "sum_last2",
+          "selected_complexity": 1,
+          "valid_candidate_count": 1000
+        },
+        {
+          "budget": 5000,
+          "candidate_count": 5000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.512,
+          "selected": "sum_last2",
+          "selected_complexity": 1,
+          "valid_candidate_count": 5000
+        },
+        {
+          "budget": 20000,
+          "candidate_count": 20000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.772,
+          "selected": "sum_last2",
+          "selected_complexity": 1,
+          "valid_candidate_count": 20000
+        }
+      ],
+      "development_points": 3,
+      "held_out_test_points": 4,
+      "next_action": "Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.",
+      "per_seed_results": [
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 30.75,
+            "n": 4
+          },
+          "elapsed_seconds": 0.445,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 0,
+          "selected_expression": "sum_last2"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 61.5,
+            "n": 4
+          },
+          "elapsed_seconds": 0.448,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 1,
+          "selected_expression": "sum_last2"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 92.25,
+            "n": 4
+          },
+          "elapsed_seconds": 0.453,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 2,
+          "selected_expression": "sum_last2"
+        }
+      ],
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "selected_configuration": {
+        "budget": 1000,
+        "candidate_count": 1000,
+        "development": {
+          "exact_accuracy": 1.0,
+          "mae": 0.0,
+          "n": 3
+        },
+        "elapsed_seconds": 0.45,
+        "selected": "sum_last2",
+        "selected_complexity": 1,
+        "valid_candidate_count": 1000
+      },
+      "selection_rule": "seed-0 development MAE, then lower complexity, then lower budget; all held-out test metrics excluded",
+      "sequence_length": 12,
+      "train_end_index": 8
+    },
+    {
+      "aggregate_baseline_test": {
+        "exact_accuracy": 0.0,
+        "mae": 960.0,
+        "mean": 960.0,
+        "n": 3,
+        "worst": 1440.0
+      },
+      "aggregate_test": {
+        "exact_accuracy": 1.0,
+        "mae": 0.0,
+        "mean": 0.0,
+        "n": 3,
+        "worst": 0.0
+      },
+      "benchmark": "geometric",
+      "configurations": [
+        {
+          "budget": 1000,
+          "candidate_count": 1000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.462,
+          "selected": "(last * 2)",
+          "selected_complexity": 2,
+          "valid_candidate_count": 1000
+        },
+        {
+          "budget": 5000,
+          "candidate_count": 5000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.511,
+          "selected": "(last * 2)",
+          "selected_complexity": 2,
+          "valid_candidate_count": 5000
+        },
+        {
+          "budget": 20000,
+          "candidate_count": 20000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.784,
+          "selected": "(last * 2)",
+          "selected_complexity": 2,
+          "valid_candidate_count": 20000
+        }
+      ],
+      "development_points": 3,
+      "held_out_test_points": 4,
+      "next_action": "Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.",
+      "per_seed_results": [
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 480.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.456,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 0,
+          "selected_expression": "(last * 2)"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 960.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.479,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 1,
+          "selected_expression": "(last * 2)"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 1440.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.452,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 2,
+          "selected_expression": "(last * 2)"
+        }
+      ],
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "selected_configuration": {
+        "budget": 1000,
+        "candidate_count": 1000,
+        "development": {
+          "exact_accuracy": 1.0,
+          "mae": 0.0,
+          "n": 3
+        },
+        "elapsed_seconds": 0.462,
+        "selected": "(last * 2)",
+        "selected_complexity": 2,
+        "valid_candidate_count": 1000
+      },
+      "selection_rule": "seed-0 development MAE, then lower complexity, then lower budget; all held-out test metrics excluded",
+      "sequence_length": 12,
+      "train_end_index": 8
+    },
+    {
+      "aggregate_baseline_test": {
+        "exact_accuracy": 0.0,
+        "mae": 247.0,
+        "mean": 247.0,
+        "n": 3,
+        "worst": 247.0
+      },
+      "aggregate_test": {
+        "exact_accuracy": 0.0,
+        "mae": 125.125,
+        "mean": 125.125,
+        "n": 3,
+        "worst": 125.125
+      },
+      "benchmark": "cubic_diagnostic",
+      "configurations": [
+        {
+          "budget": 1000,
+          "candidate_count": 1000,
+          "development": {
+            "exact_accuracy": 0.0,
+            "mae": 15.666666666666666,
+            "n": 3
+          },
+          "elapsed_seconds": 0.447,
+          "selected": "(diff2 + sum_last2)",
+          "selected_complexity": 3,
+          "valid_candidate_count": 1000
+        },
+        {
+          "budget": 5000,
+          "candidate_count": 5000,
+          "development": {
+            "exact_accuracy": 0.0,
+            "mae": 15.666666666666666,
+            "n": 3
+          },
+          "elapsed_seconds": 0.508,
+          "selected": "(diff2 + sum_last2)",
+          "selected_complexity": 3,
+          "valid_candidate_count": 5000
+        },
+        {
+          "budget": 20000,
+          "candidate_count": 20000,
+          "development": {
+            "exact_accuracy": 0.0,
+            "mae": 5.833333333333333,
+            "n": 3
+          },
+          "elapsed_seconds": 0.774,
+          "selected": "((diff1 * 3) + mean)",
+          "selected_complexity": 4,
+          "valid_candidate_count": 20000
+        }
+      ],
+      "development_points": 3,
+      "held_out_test_points": 4,
+      "next_action": "At least one seed is not exact: inspect per-seed errors before claiming robust generalization.",
+      "per_seed_results": [
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 247.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.767,
+          "held_out_test": {
+            "exact_accuracy": 0.0,
+            "mae": 125.125,
+            "n": 4
+          },
+          "seed": 0,
+          "selected_expression": "((diff1 * 3) + mean)"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 247.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.783,
+          "held_out_test": {
+            "exact_accuracy": 0.0,
+            "mae": 125.125,
+            "n": 4
+          },
+          "seed": 1,
+          "selected_expression": "((diff1 * 3) + mean)"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 247.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.777,
+          "held_out_test": {
+            "exact_accuracy": 0.0,
+            "mae": 125.125,
+            "n": 4
+          },
+          "seed": 2,
+          "selected_expression": "((diff1 * 3) + mean)"
+        }
+      ],
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "selected_configuration": {
+        "budget": 20000,
+        "candidate_count": 20000,
+        "development": {
+          "exact_accuracy": 0.0,
+          "mae": 5.833333333333333,
+          "n": 3
+        },
+        "elapsed_seconds": 0.774,
+        "selected": "((diff1 * 3) + mean)",
+        "selected_complexity": 4,
+        "valid_candidate_count": 20000
+      },
+      "selection_rule": "seed-0 development MAE, then lower complexity, then lower budget; all held-out test metrics excluded",
+      "sequence_length": 12,
+      "train_end_index": 8
+    }
+  ],
+  "run_label": "5-attempt-1",
+  "run_utc": "2026-10-27T06:54:22.643131+00:00",
+  "seeds": [
+    0,
+    1,
+    2
+  ]
+}

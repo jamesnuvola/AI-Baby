@@ -1,32 +1,39 @@
 # AI Baby — automatic improvement report
 
-- Run UTC: 2026-10-26T21:05:09.231907+00:00
-- Commit: `b55d5075e7ca6164f652bbee628e1079bf0ca3e3`
-- Run: `4-attempt-1`
+- Run UTC: 2026-10-27T06:54:22.643131+00:00
+- Commit: f2f78fb8045fe82bab5b65192a2738b40201d857
+- Run: 5-attempt-1
 - Python: 3.12.15
 - Platform: Linux-6.17.0-1022-azure-x86_64-with-glibc2.39
 - Search depth: 3
-- Budgets swept: 1000, 5000, 20000
+- Budgets swept on seed 0: 1000, 5000, 20000
+- Robustness seeds: 0, 1, 2
 
-## Results
+## Aggregate results across seeds
 
-| Benchmark | Selected budget | Development MAE | Held-out test MAE | Baseline test MAE | Exact test accuracy |
+| Benchmark family | Frozen budget | Mean test MAE | Worst-seed MAE | Mean exact accuracy | Baseline mean MAE |
 |---|---:|---:|---:|---:|---:|
-| linear_3n_plus_2 | 1000 | 0 | 0 | 3 | 100.0% |
-| quadratic_n2_plus_1 | 20000 | 0 | 0 | 18 | 100.0% |
-| fibonacci | 1000 | 0 | 0 | 30.75 | 100.0% |
+| linear | 1000 | 0 | 0 | 100.0% | 4 |
+| quadratic | 20000 | 0 | 0 | 100.0% | 19 |
+| fibonacci | 1000 | 0 | 0 | 100.0% | 61.5 |
+| geometric | 1000 | 0 | 0 | 100.0% | 960 |
+| cubic_diagnostic | 20000 | 125.125 | 125.125 | 0.0% | 247 |
 
-## Diagnosi e prossima azione
+## Per-family diagnosis and next action
 
-- **linear_3n_plus_2**: Add independent seeds and a new held-out benchmark family before claiming generalization.
-- **quadratic_n2_plus_1**: Best development configuration uses the budget ceiling: investigate pruning/search efficiency before increasing compute.
-- **fibonacci**: Add independent seeds and a new held-out benchmark family before claiming generalization.
+- **linear**: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
+- **quadratic**: Selected budget reaches the ceiling: investigate pruning/search efficiency before increasing compute.
+- **fibonacci**: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
+- **geometric**: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
+- **cubic_diagnostic**: At least one seed is not exact: inspect per-seed errors before claiming robust generalization.
 
-## Interpretazione e limiti
+## Method and limitations
 
-- Le configurazioni sono selezionate usando soltanto metriche di sviluppo; il test bloccato non sceglie il budget.
-- Il benchmark quadratico è un controllo di regressione sintetico, non una prova di capacità predittiva nel mondo reale.
-- I casi lineare e Fibonacci sono diagnostici esplorativi; non autorizzano affermazioni di generalizzazione.
-- Il workflow non modifica il codice sorgente né integra modifiche automaticamente. Ogni cambiamento dell'algoritmo richiede una pull request revisionata.
-- I dettagli completi sono nel JSON allegato.
+- Budget is selected using seed-0 development metrics only; held-out test results do not select the configuration.
+- The selected budget is frozen for all robustness seeds in that family.
+- Families include linear, quadratic, Fibonacci, geometric, and cubic diagnostic sequences.
+- Synthetic seeds are coefficient/initial-value variants, not independent real-world datasets.
+- The cubic case is diagnostic: failure is recorded as a limitation, not hidden or used to tune against the test set.
+- The workflow does not modify the search engine or merge algorithm changes automatically; changes require reviewed pull requests.
+- Full per-seed metrics and timing are available in the JSON report.
 
