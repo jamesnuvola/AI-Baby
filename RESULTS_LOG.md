@@ -72,13 +72,19 @@ Questo registro conserva risultati positivi e negativi. Aggiungere nuove prove i
 
 ## EXP-006 — Suite multi-seed e famiglie diagnostiche aggiuntive
 
-- **Stato:** implementazione candidata su branch dedicato; validazione remota in attesa della CI della pull request.
-- **Ipotesi:** risultati perfetti su tre sequenze fisse potrebbero dipendere da un benchmark troppo ristretto; varianti con semi fissati e famiglie differenti rendono visibili fragilità del motore.
-- **Modifica proposta:** sweep dei budget 1.000 / 5.000 / 20.000 soltanto sul seed 0; congelamento del budget selezionato usando esclusivamente le metriche di sviluppo; valutazione sugli stessi split di tre semi (0, 1, 2) per famiglia.
-- **Famiglie:** lineare, quadratica, Fibonacci, geometrica e cubica diagnostica.
-- **Metriche aggregate:** MAE medio, MAE del seed peggiore, accuratezza esatta media e confronto con la baseline “ripeti l'ultimo valore”; dettaglio e tempi per ogni seed nel JSON.
-- **Guardrail:** la sentinella quadratica deve rimanere esatta su tutti i semi. Il caso cubico è diagnostico e un errore va riportato, non nascosto né usato per selezionare la configurazione.
-- **Prevenzione leakage:** i semi 1 e 2 non partecipano alla selezione del budget; nessuna metrica del test determina la scelta.
-- **Limiti:** le varianti sintetiche non sono dati reali indipendenti; un successo non dimostra generalizzazione. I risultati numerici vanno aggiunti solo dopo l'esecuzione verificata della CI.
-- **Prossimo passo:** verificare test e report con GitHub Actions, correggere eventuali regressioni e registrare i risultati effettivamente osservati.
-
+- **Stato:** completato e verificato da GitHub Actions il 2026-10-27.
+- **Commit testato:** `f2f78fb8045fe82bab5b65192a2738b40201d857`.
+- **CI:** run #33 superato; test unitari, smoke test multi-seed e demo superati su Python 3.10, 3.11, 3.12 e 3.13.
+- **Continuous Improvement Lab:** run #5 superato su Python 3.12.15; report JSON/Markdown generati e storico aggiornato su GitHub.
+- **Protocollo:** sweep dei budget 1.000 / 5.000 / 20.000 sul seed 0; scelta tramite MAE di sviluppo, poi complessità e budget; budget congelato per i semi 0, 1 e 2. Nessuna metrica del test determina la selezione.
+- **Famiglie e risultati (MAE test medio / accuratezza esatta media / baseline MAE medio):**
+  - Lineare — budget 1.000; **0 / 100% / 4**.
+  - Quadratica — budget 20.000; **0 / 100% / 19**.
+  - Fibonacci — budget 1.000; **0 / 100% / 61,5**.
+  - Geometrica — budget 1.000; **0 / 100% / 960**.
+  - Cubica diagnostica — budget 20.000; **125,125 / 0% / 247**.
+- **Esito positivo:** le quattro famiglie lineare, quadratica, Fibonacci e geometrica hanno mantenuto previsione esatta su tutti e tre i semi.
+- **Esito negativo significativo:** la famiglia cubica non è stata appresa dal DSL corrente; MAE test 125,125 e accuratezza esatta 0%, pur migliorando la baseline (MAE 247). Questo è un limite concreto del motore, non un risultato da nascondere.
+- **Diagnosi successiva:** il caso quadratico sceglie ancora il tetto di budget 20.000; il prossimo esperimento deve analizzare l'efficienza della ricerca e le cause del fallimento cubico, senza adattare il motore al test bloccato.
+- **Limiti:** tre semi sintetici per famiglia non equivalgono a dati reali indipendenti e non provano generalizzazione nel mondo reale. Il test cubico è diagnostico e non ha influenzato la selezione.
+- **Report persistente:** `reports/benchmark-report.md`, `reports/benchmark-report.json`, `reports/HISTORY.md` e snapshot per-run sotto `reports/history/`.
