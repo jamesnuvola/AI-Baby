@@ -1,8 +1,8 @@
 # AI Baby — automatic improvement report
 
-- Run UTC: 2026-10-27T06:54:22.643131+00:00
-- Commit: f2f78fb8045fe82bab5b65192a2738b40201d857
-- Run: 5-attempt-1
+- Run UTC: 2026-10-27T06:57:50.105859+00:00
+- Commit: a1cbdcccd70aa2c767ab3d47567df3d7f0294e80
+- Run: 6-attempt-1
 - Python: 3.12.15
 - Platform: Linux-6.17.0-1022-azure-x86_64-with-glibc2.39
 - Search depth: 3
@@ -14,18 +14,18 @@
 | Benchmark family | Frozen budget | Mean test MAE | Worst-seed MAE | Mean exact accuracy | Baseline mean MAE |
 |---|---:|---:|---:|---:|---:|
 | linear | 1000 | 0 | 0 | 100.0% | 4 |
-| quadratic | 20000 | 0 | 0 | 100.0% | 19 |
+| quadratic | 1000 | 0 | 0 | 100.0% | 19 |
 | fibonacci | 1000 | 0 | 0 | 100.0% | 61.5 |
 | geometric | 1000 | 0 | 0 | 100.0% | 960 |
-| cubic_diagnostic | 20000 | 125.125 | 125.125 | 0.0% | 247 |
+| cubic_diagnostic | 1000 | 0 | 0 | 100.0% | 247 |
 
 ## Per-family diagnosis and next action
 
 - **linear**: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
-- **quadratic**: Selected budget reaches the ceiling: investigate pruning/search efficiency before increasing compute.
+- **quadratic**: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
 - **fibonacci**: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
 - **geometric**: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
-- **cubic_diagnostic**: At least one seed is not exact: inspect per-seed errors before claiming robust generalization.
+- **cubic_diagnostic**: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
 
 ## Method and limitations
 

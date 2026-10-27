@@ -1,0 +1,665 @@
+{
+  "budgets": [
+    1000,
+    5000,
+    20000
+  ],
+  "commit": "a1cbdcccd70aa2c767ab3d47567df3d7f0294e80",
+  "max_depth": 3,
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.12.15",
+  "results": [
+    {
+      "aggregate_baseline_test": {
+        "exact_accuracy": 0.0,
+        "mae": 4.0,
+        "mean": 4.0,
+        "n": 3,
+        "worst": 5.0
+      },
+      "aggregate_test": {
+        "exact_accuracy": 1.0,
+        "mae": 0.0,
+        "mean": 0.0,
+        "n": 3,
+        "worst": 0.0
+      },
+      "benchmark": "linear",
+      "configurations": [
+        {
+          "budget": 1000,
+          "candidate_count": 1000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.515,
+          "selected": "newton3",
+          "selected_complexity": 1,
+          "valid_candidate_count": 1000
+        },
+        {
+          "budget": 5000,
+          "candidate_count": 5000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.568,
+          "selected": "newton3",
+          "selected_complexity": 1,
+          "valid_candidate_count": 5000
+        },
+        {
+          "budget": 20000,
+          "candidate_count": 20000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.811,
+          "selected": "newton3",
+          "selected_complexity": 1,
+          "valid_candidate_count": 20000
+        }
+      ],
+      "development_points": 3,
+      "held_out_test_points": 4,
+      "next_action": "Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.",
+      "per_seed_results": [
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 3.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.508,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 0,
+          "selected_expression": "newton3"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 4.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.507,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 1,
+          "selected_expression": "newton3"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 5.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.504,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 2,
+          "selected_expression": "newton3"
+        }
+      ],
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "selected_configuration": {
+        "budget": 1000,
+        "candidate_count": 1000,
+        "development": {
+          "exact_accuracy": 1.0,
+          "mae": 0.0,
+          "n": 3
+        },
+        "elapsed_seconds": 0.515,
+        "selected": "newton3",
+        "selected_complexity": 1,
+        "valid_candidate_count": 1000
+      },
+      "selection_rule": "seed-0 development MAE, then lower complexity, then lower budget; all held-out test metrics excluded",
+      "sequence_length": 12,
+      "train_end_index": 8
+    },
+    {
+      "aggregate_baseline_test": {
+        "exact_accuracy": 0.0,
+        "mae": 19.0,
+        "mean": 19.0,
+        "n": 3,
+        "worst": 20.0
+      },
+      "aggregate_test": {
+        "exact_accuracy": 1.0,
+        "mae": 0.0,
+        "mean": 0.0,
+        "n": 3,
+        "worst": 0.0
+      },
+      "benchmark": "quadratic",
+      "configurations": [
+        {
+          "budget": 1000,
+          "candidate_count": 1000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.506,
+          "selected": "newton3",
+          "selected_complexity": 1,
+          "valid_candidate_count": 1000
+        },
+        {
+          "budget": 5000,
+          "candidate_count": 5000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.563,
+          "selected": "newton3",
+          "selected_complexity": 1,
+          "valid_candidate_count": 5000
+        },
+        {
+          "budget": 20000,
+          "candidate_count": 20000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.821,
+          "selected": "newton3",
+          "selected_complexity": 1,
+          "valid_candidate_count": 20000
+        }
+      ],
+      "development_points": 3,
+      "held_out_test_points": 4,
+      "next_action": "Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.",
+      "per_seed_results": [
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 18.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.502,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 0,
+          "selected_expression": "newton3"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 19.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.532,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 1,
+          "selected_expression": "newton3"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 20.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.502,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 2,
+          "selected_expression": "newton3"
+        }
+      ],
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "selected_configuration": {
+        "budget": 1000,
+        "candidate_count": 1000,
+        "development": {
+          "exact_accuracy": 1.0,
+          "mae": 0.0,
+          "n": 3
+        },
+        "elapsed_seconds": 0.506,
+        "selected": "newton3",
+        "selected_complexity": 1,
+        "valid_candidate_count": 1000
+      },
+      "selection_rule": "seed-0 development MAE, then lower complexity, then lower budget; all held-out test metrics excluded",
+      "sequence_length": 12,
+      "train_end_index": 8
+    },
+    {
+      "aggregate_baseline_test": {
+        "exact_accuracy": 0.0,
+        "mae": 61.5,
+        "mean": 61.5,
+        "n": 3,
+        "worst": 92.25
+      },
+      "aggregate_test": {
+        "exact_accuracy": 1.0,
+        "mae": 0.0,
+        "mean": 0.0,
+        "n": 3,
+        "worst": 0.0
+      },
+      "benchmark": "fibonacci",
+      "configurations": [
+        {
+          "budget": 1000,
+          "candidate_count": 1000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.509,
+          "selected": "sum_last2",
+          "selected_complexity": 1,
+          "valid_candidate_count": 1000
+        },
+        {
+          "budget": 5000,
+          "candidate_count": 5000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.559,
+          "selected": "sum_last2",
+          "selected_complexity": 1,
+          "valid_candidate_count": 5000
+        },
+        {
+          "budget": 20000,
+          "candidate_count": 20000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.816,
+          "selected": "sum_last2",
+          "selected_complexity": 1,
+          "valid_candidate_count": 20000
+        }
+      ],
+      "development_points": 3,
+      "held_out_test_points": 4,
+      "next_action": "Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.",
+      "per_seed_results": [
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 30.75,
+            "n": 4
+          },
+          "elapsed_seconds": 0.507,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 0,
+          "selected_expression": "sum_last2"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 61.5,
+            "n": 4
+          },
+          "elapsed_seconds": 0.506,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 1,
+          "selected_expression": "sum_last2"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 92.25,
+            "n": 4
+          },
+          "elapsed_seconds": 0.511,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 2,
+          "selected_expression": "sum_last2"
+        }
+      ],
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "selected_configuration": {
+        "budget": 1000,
+        "candidate_count": 1000,
+        "development": {
+          "exact_accuracy": 1.0,
+          "mae": 0.0,
+          "n": 3
+        },
+        "elapsed_seconds": 0.509,
+        "selected": "sum_last2",
+        "selected_complexity": 1,
+        "valid_candidate_count": 1000
+      },
+      "selection_rule": "seed-0 development MAE, then lower complexity, then lower budget; all held-out test metrics excluded",
+      "sequence_length": 12,
+      "train_end_index": 8
+    },
+    {
+      "aggregate_baseline_test": {
+        "exact_accuracy": 0.0,
+        "mae": 960.0,
+        "mean": 960.0,
+        "n": 3,
+        "worst": 1440.0
+      },
+      "aggregate_test": {
+        "exact_accuracy": 1.0,
+        "mae": 0.0,
+        "mean": 0.0,
+        "n": 3,
+        "worst": 0.0
+      },
+      "benchmark": "geometric",
+      "configurations": [
+        {
+          "budget": 1000,
+          "candidate_count": 1000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.517,
+          "selected": "(last * 2)",
+          "selected_complexity": 2,
+          "valid_candidate_count": 1000
+        },
+        {
+          "budget": 5000,
+          "candidate_count": 5000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.581,
+          "selected": "(last * 2)",
+          "selected_complexity": 2,
+          "valid_candidate_count": 5000
+        },
+        {
+          "budget": 20000,
+          "candidate_count": 20000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.849,
+          "selected": "(last * 2)",
+          "selected_complexity": 2,
+          "valid_candidate_count": 20000
+        }
+      ],
+      "development_points": 3,
+      "held_out_test_points": 4,
+      "next_action": "Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.",
+      "per_seed_results": [
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 480.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.52,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 0,
+          "selected_expression": "(last * 2)"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 960.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.517,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 1,
+          "selected_expression": "(last * 2)"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 1440.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.52,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 2,
+          "selected_expression": "(last * 2)"
+        }
+      ],
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "selected_configuration": {
+        "budget": 1000,
+        "candidate_count": 1000,
+        "development": {
+          "exact_accuracy": 1.0,
+          "mae": 0.0,
+          "n": 3
+        },
+        "elapsed_seconds": 0.517,
+        "selected": "(last * 2)",
+        "selected_complexity": 2,
+        "valid_candidate_count": 1000
+      },
+      "selection_rule": "seed-0 development MAE, then lower complexity, then lower budget; all held-out test metrics excluded",
+      "sequence_length": 12,
+      "train_end_index": 8
+    },
+    {
+      "aggregate_baseline_test": {
+        "exact_accuracy": 0.0,
+        "mae": 247.0,
+        "mean": 247.0,
+        "n": 3,
+        "worst": 247.0
+      },
+      "aggregate_test": {
+        "exact_accuracy": 1.0,
+        "mae": 0.0,
+        "mean": 0.0,
+        "n": 3,
+        "worst": 0.0
+      },
+      "benchmark": "cubic_diagnostic",
+      "configurations": [
+        {
+          "budget": 1000,
+          "candidate_count": 1000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.522,
+          "selected": "newton3",
+          "selected_complexity": 1,
+          "valid_candidate_count": 1000
+        },
+        {
+          "budget": 5000,
+          "candidate_count": 5000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.574,
+          "selected": "newton3",
+          "selected_complexity": 1,
+          "valid_candidate_count": 5000
+        },
+        {
+          "budget": 20000,
+          "candidate_count": 20000,
+          "development": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 3
+          },
+          "elapsed_seconds": 0.844,
+          "selected": "newton3",
+          "selected_complexity": 1,
+          "valid_candidate_count": 20000
+        }
+      ],
+      "development_points": 3,
+      "held_out_test_points": 4,
+      "next_action": "Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.",
+      "per_seed_results": [
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 247.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.511,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 0,
+          "selected_expression": "newton3"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 247.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.504,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 1,
+          "selected_expression": "newton3"
+        },
+        {
+          "baseline_last_value_test": {
+            "exact_accuracy": 0.0,
+            "mae": 247.0,
+            "n": 4
+          },
+          "elapsed_seconds": 0.511,
+          "held_out_test": {
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
+            "n": 4
+          },
+          "seed": 2,
+          "selected_expression": "newton3"
+        }
+      ],
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "selected_configuration": {
+        "budget": 1000,
+        "candidate_count": 1000,
+        "development": {
+          "exact_accuracy": 1.0,
+          "mae": 0.0,
+          "n": 3
+        },
+        "elapsed_seconds": 0.522,
+        "selected": "newton3",
+        "selected_complexity": 1,
+        "valid_candidate_count": 1000
+      },
+      "selection_rule": "seed-0 development MAE, then lower complexity, then lower budget; all held-out test metrics excluded",
+      "sequence_length": 12,
+      "train_end_index": 8
+    }
+  ],
+  "run_label": "6-attempt-1",
+  "run_utc": "2026-10-27T06:57:50.105859+00:00",
+  "seeds": [
+    0,
+    1,
+    2
+  ]
+}

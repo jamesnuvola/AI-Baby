@@ -4,7 +4,7 @@
     5000,
     20000
   ],
-  "commit": "f2f78fb8045fe82bab5b65192a2738b40201d857",
+  "commit": "a1cbdcccd70aa2c767ab3d47567df3d7f0294e80",
   "max_depth": 3,
   "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
   "python": "3.12.15",
@@ -34,9 +34,9 @@
             "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.459,
-          "selected": "(last + 3)",
-          "selected_complexity": 2,
+          "elapsed_seconds": 0.515,
+          "selected": "newton3",
+          "selected_complexity": 1,
           "valid_candidate_count": 1000
         },
         {
@@ -47,9 +47,9 @@
             "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.503,
-          "selected": "(last + 3)",
-          "selected_complexity": 2,
+          "elapsed_seconds": 0.568,
+          "selected": "newton3",
+          "selected_complexity": 1,
           "valid_candidate_count": 5000
         },
         {
@@ -60,9 +60,9 @@
             "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.768,
-          "selected": "(last + 3)",
-          "selected_complexity": 2,
+          "elapsed_seconds": 0.811,
+          "selected": "newton3",
+          "selected_complexity": 1,
           "valid_candidate_count": 20000
         }
       ],
@@ -76,14 +76,14 @@
             "mae": 3.0,
             "n": 4
           },
-          "elapsed_seconds": 0.456,
+          "elapsed_seconds": 0.508,
           "held_out_test": {
             "exact_accuracy": 1.0,
             "mae": 0.0,
             "n": 4
           },
           "seed": 0,
-          "selected_expression": "(last + 3)"
+          "selected_expression": "newton3"
         },
         {
           "baseline_last_value_test": {
@@ -91,14 +91,14 @@
             "mae": 4.0,
             "n": 4
           },
-          "elapsed_seconds": 0.46,
+          "elapsed_seconds": 0.507,
           "held_out_test": {
             "exact_accuracy": 1.0,
             "mae": 0.0,
             "n": 4
           },
           "seed": 1,
-          "selected_expression": "(last + diff1)"
+          "selected_expression": "newton3"
         },
         {
           "baseline_last_value_test": {
@@ -106,14 +106,14 @@
             "mae": 5.0,
             "n": 4
           },
-          "elapsed_seconds": 0.459,
+          "elapsed_seconds": 0.504,
           "held_out_test": {
             "exact_accuracy": 1.0,
             "mae": 0.0,
             "n": 4
           },
           "seed": 2,
-          "selected_expression": "(last + diff1)"
+          "selected_expression": "newton3"
         }
       ],
       "seeds": [
@@ -129,9 +129,9 @@
           "mae": 0.0,
           "n": 3
         },
-        "elapsed_seconds": 0.459,
-        "selected": "(last + 3)",
-        "selected_complexity": 2,
+        "elapsed_seconds": 0.515,
+        "selected": "newton3",
+        "selected_complexity": 1,
         "valid_candidate_count": 1000
       },
       "selection_rule": "seed-0 development MAE, then lower complexity, then lower budget; all held-out test metrics excluded",
@@ -159,26 +159,26 @@
           "budget": 1000,
           "candidate_count": 1000,
           "development": {
-            "exact_accuracy": 0.0,
-            "mae": 1.2777777777777786,
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.461,
-          "selected": "(last + mean)",
-          "selected_complexity": 3,
+          "elapsed_seconds": 0.506,
+          "selected": "newton3",
+          "selected_complexity": 1,
           "valid_candidate_count": 1000
         },
         {
           "budget": 5000,
           "candidate_count": 5000,
           "development": {
-            "exact_accuracy": 0.3333333333333333,
-            "mae": 0.5,
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.529,
-          "selected": "((2 + 3) * median)",
-          "selected_complexity": 4,
+          "elapsed_seconds": 0.563,
+          "selected": "newton3",
+          "selected_complexity": 1,
           "valid_candidate_count": 5000
         },
         {
@@ -189,15 +189,15 @@
             "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.786,
-          "selected": "((diff1 * 3) + prev(2))",
-          "selected_complexity": 4,
+          "elapsed_seconds": 0.821,
+          "selected": "newton3",
+          "selected_complexity": 1,
           "valid_candidate_count": 20000
         }
       ],
       "development_points": 3,
       "held_out_test_points": 4,
-      "next_action": "Selected budget reaches the ceiling: investigate pruning/search efficiency before increasing compute.",
+      "next_action": "Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.",
       "per_seed_results": [
         {
           "baseline_last_value_test": {
@@ -205,14 +205,14 @@
             "mae": 18.0,
             "n": 4
           },
-          "elapsed_seconds": 0.781,
+          "elapsed_seconds": 0.502,
           "held_out_test": {
             "exact_accuracy": 1.0,
             "mae": 0.0,
             "n": 4
           },
           "seed": 0,
-          "selected_expression": "((diff1 * 3) + prev(2))"
+          "selected_expression": "newton3"
         },
         {
           "baseline_last_value_test": {
@@ -220,14 +220,14 @@
             "mae": 19.0,
             "n": 4
           },
-          "elapsed_seconds": 0.769,
+          "elapsed_seconds": 0.532,
           "held_out_test": {
             "exact_accuracy": 1.0,
             "mae": 0.0,
             "n": 4
           },
           "seed": 1,
-          "selected_expression": "((diff1 * 3) + prev(2))"
+          "selected_expression": "newton3"
         },
         {
           "baseline_last_value_test": {
@@ -235,14 +235,14 @@
             "mae": 20.0,
             "n": 4
           },
-          "elapsed_seconds": 0.767,
+          "elapsed_seconds": 0.502,
           "held_out_test": {
             "exact_accuracy": 1.0,
             "mae": 0.0,
             "n": 4
           },
           "seed": 2,
-          "selected_expression": "((diff1 * 3) + prev(2))"
+          "selected_expression": "newton3"
         }
       ],
       "seeds": [
@@ -251,17 +251,17 @@
         2
       ],
       "selected_configuration": {
-        "budget": 20000,
-        "candidate_count": 20000,
+        "budget": 1000,
+        "candidate_count": 1000,
         "development": {
           "exact_accuracy": 1.0,
           "mae": 0.0,
           "n": 3
         },
-        "elapsed_seconds": 0.786,
-        "selected": "((diff1 * 3) + prev(2))",
-        "selected_complexity": 4,
-        "valid_candidate_count": 20000
+        "elapsed_seconds": 0.506,
+        "selected": "newton3",
+        "selected_complexity": 1,
+        "valid_candidate_count": 1000
       },
       "selection_rule": "seed-0 development MAE, then lower complexity, then lower budget; all held-out test metrics excluded",
       "sequence_length": 12,
@@ -292,7 +292,7 @@
             "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.45,
+          "elapsed_seconds": 0.509,
           "selected": "sum_last2",
           "selected_complexity": 1,
           "valid_candidate_count": 1000
@@ -305,7 +305,7 @@
             "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.512,
+          "elapsed_seconds": 0.559,
           "selected": "sum_last2",
           "selected_complexity": 1,
           "valid_candidate_count": 5000
@@ -318,7 +318,7 @@
             "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.772,
+          "elapsed_seconds": 0.816,
           "selected": "sum_last2",
           "selected_complexity": 1,
           "valid_candidate_count": 20000
@@ -334,7 +334,7 @@
             "mae": 30.75,
             "n": 4
           },
-          "elapsed_seconds": 0.445,
+          "elapsed_seconds": 0.507,
           "held_out_test": {
             "exact_accuracy": 1.0,
             "mae": 0.0,
@@ -349,7 +349,7 @@
             "mae": 61.5,
             "n": 4
           },
-          "elapsed_seconds": 0.448,
+          "elapsed_seconds": 0.506,
           "held_out_test": {
             "exact_accuracy": 1.0,
             "mae": 0.0,
@@ -364,7 +364,7 @@
             "mae": 92.25,
             "n": 4
           },
-          "elapsed_seconds": 0.453,
+          "elapsed_seconds": 0.511,
           "held_out_test": {
             "exact_accuracy": 1.0,
             "mae": 0.0,
@@ -387,7 +387,7 @@
           "mae": 0.0,
           "n": 3
         },
-        "elapsed_seconds": 0.45,
+        "elapsed_seconds": 0.509,
         "selected": "sum_last2",
         "selected_complexity": 1,
         "valid_candidate_count": 1000
@@ -421,7 +421,7 @@
             "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.462,
+          "elapsed_seconds": 0.517,
           "selected": "(last * 2)",
           "selected_complexity": 2,
           "valid_candidate_count": 1000
@@ -434,7 +434,7 @@
             "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.511,
+          "elapsed_seconds": 0.581,
           "selected": "(last * 2)",
           "selected_complexity": 2,
           "valid_candidate_count": 5000
@@ -447,7 +447,7 @@
             "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.784,
+          "elapsed_seconds": 0.849,
           "selected": "(last * 2)",
           "selected_complexity": 2,
           "valid_candidate_count": 20000
@@ -463,7 +463,7 @@
             "mae": 480.0,
             "n": 4
           },
-          "elapsed_seconds": 0.456,
+          "elapsed_seconds": 0.52,
           "held_out_test": {
             "exact_accuracy": 1.0,
             "mae": 0.0,
@@ -478,7 +478,7 @@
             "mae": 960.0,
             "n": 4
           },
-          "elapsed_seconds": 0.479,
+          "elapsed_seconds": 0.517,
           "held_out_test": {
             "exact_accuracy": 1.0,
             "mae": 0.0,
@@ -493,7 +493,7 @@
             "mae": 1440.0,
             "n": 4
           },
-          "elapsed_seconds": 0.452,
+          "elapsed_seconds": 0.52,
           "held_out_test": {
             "exact_accuracy": 1.0,
             "mae": 0.0,
@@ -516,7 +516,7 @@
           "mae": 0.0,
           "n": 3
         },
-        "elapsed_seconds": 0.462,
+        "elapsed_seconds": 0.517,
         "selected": "(last * 2)",
         "selected_complexity": 2,
         "valid_candidate_count": 1000
@@ -534,11 +534,11 @@
         "worst": 247.0
       },
       "aggregate_test": {
-        "exact_accuracy": 0.0,
-        "mae": 125.125,
-        "mean": 125.125,
+        "exact_accuracy": 1.0,
+        "mae": 0.0,
+        "mean": 0.0,
         "n": 3,
-        "worst": 125.125
+        "worst": 0.0
       },
       "benchmark": "cubic_diagnostic",
       "configurations": [
@@ -546,45 +546,45 @@
           "budget": 1000,
           "candidate_count": 1000,
           "development": {
-            "exact_accuracy": 0.0,
-            "mae": 15.666666666666666,
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.447,
-          "selected": "(diff2 + sum_last2)",
-          "selected_complexity": 3,
+          "elapsed_seconds": 0.522,
+          "selected": "newton3",
+          "selected_complexity": 1,
           "valid_candidate_count": 1000
         },
         {
           "budget": 5000,
           "candidate_count": 5000,
           "development": {
-            "exact_accuracy": 0.0,
-            "mae": 15.666666666666666,
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.508,
-          "selected": "(diff2 + sum_last2)",
-          "selected_complexity": 3,
+          "elapsed_seconds": 0.574,
+          "selected": "newton3",
+          "selected_complexity": 1,
           "valid_candidate_count": 5000
         },
         {
           "budget": 20000,
           "candidate_count": 20000,
           "development": {
-            "exact_accuracy": 0.0,
-            "mae": 5.833333333333333,
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
             "n": 3
           },
-          "elapsed_seconds": 0.774,
-          "selected": "((diff1 * 3) + mean)",
-          "selected_complexity": 4,
+          "elapsed_seconds": 0.844,
+          "selected": "newton3",
+          "selected_complexity": 1,
           "valid_candidate_count": 20000
         }
       ],
       "development_points": 3,
       "held_out_test_points": 4,
-      "next_action": "At least one seed is not exact: inspect per-seed errors before claiming robust generalization.",
+      "next_action": "Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.",
       "per_seed_results": [
         {
           "baseline_last_value_test": {
@@ -592,14 +592,14 @@
             "mae": 247.0,
             "n": 4
           },
-          "elapsed_seconds": 0.767,
+          "elapsed_seconds": 0.511,
           "held_out_test": {
-            "exact_accuracy": 0.0,
-            "mae": 125.125,
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
             "n": 4
           },
           "seed": 0,
-          "selected_expression": "((diff1 * 3) + mean)"
+          "selected_expression": "newton3"
         },
         {
           "baseline_last_value_test": {
@@ -607,14 +607,14 @@
             "mae": 247.0,
             "n": 4
           },
-          "elapsed_seconds": 0.783,
+          "elapsed_seconds": 0.504,
           "held_out_test": {
-            "exact_accuracy": 0.0,
-            "mae": 125.125,
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
             "n": 4
           },
           "seed": 1,
-          "selected_expression": "((diff1 * 3) + mean)"
+          "selected_expression": "newton3"
         },
         {
           "baseline_last_value_test": {
@@ -622,14 +622,14 @@
             "mae": 247.0,
             "n": 4
           },
-          "elapsed_seconds": 0.777,
+          "elapsed_seconds": 0.511,
           "held_out_test": {
-            "exact_accuracy": 0.0,
-            "mae": 125.125,
+            "exact_accuracy": 1.0,
+            "mae": 0.0,
             "n": 4
           },
           "seed": 2,
-          "selected_expression": "((diff1 * 3) + mean)"
+          "selected_expression": "newton3"
         }
       ],
       "seeds": [
@@ -638,25 +638,25 @@
         2
       ],
       "selected_configuration": {
-        "budget": 20000,
-        "candidate_count": 20000,
+        "budget": 1000,
+        "candidate_count": 1000,
         "development": {
-          "exact_accuracy": 0.0,
-          "mae": 5.833333333333333,
+          "exact_accuracy": 1.0,
+          "mae": 0.0,
           "n": 3
         },
-        "elapsed_seconds": 0.774,
-        "selected": "((diff1 * 3) + mean)",
-        "selected_complexity": 4,
-        "valid_candidate_count": 20000
+        "elapsed_seconds": 0.522,
+        "selected": "newton3",
+        "selected_complexity": 1,
+        "valid_candidate_count": 1000
       },
       "selection_rule": "seed-0 development MAE, then lower complexity, then lower budget; all held-out test metrics excluded",
       "sequence_length": 12,
       "train_end_index": 8
     }
   ],
-  "run_label": "5-attempt-1",
-  "run_utc": "2026-10-27T06:54:22.643131+00:00",
+  "run_label": "6-attempt-1",
+  "run_utc": "2026-10-27T06:57:50.105859+00:00",
   "seeds": [
     0,
     1,
