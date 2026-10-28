@@ -47,6 +47,8 @@ jobs:
             echo "No report changes to persist."
           else
             git commit -m "research: daily lottery variable sweep $(date -u +%F)"
+            git fetch origin main
+            git rebase origin/main
             git push origin HEAD:main
           fi
       - name: Upload report as workflow artifact
