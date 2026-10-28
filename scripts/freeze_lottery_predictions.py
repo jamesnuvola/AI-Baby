@@ -46,6 +46,7 @@ def build_freeze(
         "number_pool": rules["maximum"],
         "uniform_expected_hits": rules["count"] ** 2 / rules["maximum"],
         "predictions": predictions,
+        "source_manifest": f"data/{game}_snapshot_2026-10-27.manifest.json",
         "status": "FROZEN_BEFORE_TARGET; shadow evaluation only; no method promoted",
     }
 
