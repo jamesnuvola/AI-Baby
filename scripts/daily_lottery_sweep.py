@@ -155,7 +155,7 @@ def main() -> None:
         lines.extend([
             f"## {game}",
             "",
-            f"Dataset: {data['draw_count']} draws, {data['first_draw_date']} through {data['last_draw_date']}.",
+            f"Scored targets: {data['draw_count_in_scored_window']}; history starts {data['history_start_date']}; first target {data['first_target_date']}; latest draw {data['last_draw_date']}.",
             "",
             "| Method | All mean hits | 2023–24 mean hits | 2025+ mean hits |",
             "|---|---:|---:|---:|",
