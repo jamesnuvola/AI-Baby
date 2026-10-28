@@ -9656,7 +9656,7 @@
       "warning": "2023-2024 and 2025+ were previously explored; neither is an untouched blind holdout. Repeated parameter sweeps inflate apparent best scores."
     }
   },
-  "generated_at_utc": "2026-10-28T18:48:54.851920+00:00",
+  "generated_at_utc": "2026-10-28T18:56:09.094953+00:00",
   "next_required_step": "Refresh official source data and score frozen prospective predictions before claiming any edge.",
   "run_date_utc": "2026-10-28",
   "status": "exploratory; no model promotion"

@@ -1,6 +1,6 @@
 # Daily variable sweep — 2026-10-28
 
-Generated: 2026-10-28T18:48:54.851920+00:00
+Generated: 2026-10-28T18:56:09.094953+00:00
 
 **Status:** exploratory. No method is promoted automatically.
 
