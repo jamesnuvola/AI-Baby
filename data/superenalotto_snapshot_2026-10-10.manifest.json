@@ -1,0 +1,25 @@
+{
+  "dataset": "SuperEnalotto main-number historical snapshot",
+  "game": "superenalotto",
+  "format": "canonical CSV: draw_id,date,game,numbers",
+  "row_count": 2934,
+  "first_draw_date": "2009-01-02",
+  "last_draw_date": "2026-10-10",
+  "retrieved_at": "2026-10-28",
+  "source_repository": "https://github.com/jamesnuvola/Superenalotto",
+  "source_ref": "c14ef212d8b28014d58c99599b82c05bcf7b6240",
+  "source_file": "src/data/draws.js",
+  "source_blob_sha": "05008eaa67365d625c8ab8c7cb49d84ab83fd09a",
+  "source_file_url": "https://github.com/jamesnuvola/Superenalotto/blob/c14ef212d8b28014d58c99599b82c05bcf7b6240/src/data/draws.js",
+  "included_fields": ["six main numbers"],
+  "excluded_fields": ["Jolly", "SuperStar"],
+  "validation": {
+    "chronological": true,
+    "row_count_matches_source": true,
+    "six_distinct_numbers_per_draw": true,
+    "numbers_in_range_1_to_90": true
+  },
+  "freshness_warning": "This source snapshot ends on 2026-10-10 and is stale relative to the official archive as checked on 2026-10-28. Do not use it as current data until newer draws are acquired and independently verified.",
+  "official_archive": "https://www.superenalotto.it/archivio-estrazioni",
+  "predictive_claim": "None. Dataset import is not evidence of predictive advantage."
+}
