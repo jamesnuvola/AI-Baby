@@ -9,6 +9,8 @@ from ai_baby.lottery_methods import (
     overdue_first,
     random_uniform,
     recent_frequency,
+    transition_analogue,
+    gap_trajectory_neighbours,
 )
 
 
@@ -27,6 +29,8 @@ class LotteryMethodTests(unittest.TestCase):
             exponential_decay(3),
             overdue_first,
             random_uniform(7),
+            transition_analogue(min_overlap=2, power=3),
+            gap_trajectory_neighbours(neighbours=5),
         ]
         for method in methods:
             prediction = method(self.history)
