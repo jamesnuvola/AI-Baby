@@ -108,6 +108,73 @@ def parameter_grid(run_date: str | None = None) -> dict[str, object]:
     return methods
 
 
+def build_exact_rule_catalog(
+    game: str,
+    records_by_method: dict[str, list[dict]],
+    run_date: str,
+    dataset_path: str,
+    dataset_sha256: str,
+) -> dict:
+    """Archive every historical exact full-ticket and rank-level rule hit."""
+    full_exact = []
+    rank_exact = []
+    for method_name, records in sorted(records_by_method.items()):
+        for record in records:
+            prediction = [int(n) for n in record["prediction"]]
+            actual = [int(n) for n in record["actual"]]
+            common = {
+                "method": method_name,
+                "target_draw_id": record["target_draw_id"],
+                "target_date": record["target_date"],
+                "history_size": int(record["history_size"]),
+                "prediction": prediction,
+                "actual": actual,
+            }
+            if prediction == actual:
+                full_exact.append({**common, "match_type": "all_sorted_positions_exact"})
+            for rank, (predicted_number, actual_number) in enumerate(zip(prediction, actual), start=1):
+                if predicted_number == actual_number:
+                    rank_exact.append({
+                        "method": method_name,
+                        "target_draw_id": record["target_draw_id"],
+                        "target_date": record["target_date"],
+                        "history_size": int(record["history_size"]),
+                        "rank": rank,
+                        "predicted_number": predicted_number,
+                        "actual_number": actual_number,
+                        "full_ticket_also_exact": prediction == actual,
+                    })
+    full_exact.sort(key=lambda item: (item["target_date"], item["method"], item["target_draw_id"]))
+    rank_exact.sort(key=lambda item: (item["target_date"], item["rank"], item["method"], item["target_draw_id"]))
+    first_records = next(iter(records_by_method.values()), [])
+    rank_count = len(first_records[0]["prediction"]) if first_records else 0
+    return {
+        "schema_version": 1,
+        "record_type": "historical_exact_rule_catalog",
+        "game": game,
+        "generated_for_date_utc": run_date,
+        "dataset_path": dataset_path,
+        "dataset_sha256": dataset_sha256,
+        "rule_count_evaluated": len(records_by_method),
+        "full_position_exact_matches": full_exact,
+        "rank_exact_matches": rank_exact,
+        "rank_summary": [
+            {
+                "rank": rank,
+                "exact_match_count": sum(item["rank"] == rank for item in rank_exact),
+                "distinct_methods_with_exact_match": sorted({
+                    item["method"] for item in rank_exact if item["rank"] == rank
+                }),
+            }
+            for rank in range(1, rank_count + 1)
+        ],
+        "interpretation": (
+            "Keep all exact historical rule hits for later flow analysis. These are in-sample discovery results; "
+            "they do not alone establish prospective predictive power."
+        ),
+    }
+
+
 def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 100) -> dict:
     draws = load_draws_csv(csv_path, game=game)
     if len(draws) <= minimum_history:
@@ -124,10 +191,12 @@ def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 1
     rules = GAME_RULES[game]
     methods = parameter_grid(run_date)
     results = {}
+    records_by_method = {}
     for name, predictor in methods.items():
         backtest = rolling_origin_backtest(draws, predictor, minimum_history=minimum_history)
         records = backtest["records"]
         assert isinstance(records, list)
+        records_by_method[name] = records
         segments = {
             "all": records,
             "2023_2024_exploratory": [
@@ -147,9 +216,25 @@ def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 1
             name,
         ),
     )
+    dataset_sha256 = hashlib.sha256(Path(csv_path).read_bytes()).hexdigest()
+    exact_catalog = build_exact_rule_catalog(game, records_by_method, run_date, csv_path, dataset_sha256)
+    catalog_dir = Path("reports/continuous")
+    catalog_dir.mkdir(parents=True, exist_ok=True)
+    (catalog_dir / f"exact-rule-catalog-{game}-{run_date}.json").write_text(
+        json.dumps(exact_catalog, indent=2, sort_keys=True) + "\\n", encoding="utf-8"
+    )
+    (catalog_dir / f"exact-rule-catalog-{game}-latest.json").write_text(
+        json.dumps(exact_catalog, indent=2, sort_keys=True) + "\\n", encoding="utf-8"
+    )
     return {
+        "exact_rule_catalog": {
+            "full_position_exact_count": len(exact_catalog["full_position_exact_matches"]),
+            "rank_exact_match_count": len(exact_catalog["rank_exact_matches"]),
+            "dated_path": f"reports/continuous/exact-rule-catalog-{game}-{run_date}.json",
+        },
         "game": game,
         "dataset": csv_path,
+        "dataset_sha256": dataset_sha256,
         "draw_count_in_scored_window": len(draws) - minimum_history,
         "history_start_date": draws[0].draw_date.isoformat(),
         "first_target_date": draws[minimum_history].draw_date.isoformat(),
