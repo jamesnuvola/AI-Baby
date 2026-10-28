@@ -4,7 +4,7 @@ import unittest
 from datetime import date, datetime, timezone
 from pathlib import Path
 
-from scripts.daily_lottery_sweep import write_prospective_freezes
+from scripts.daily_lottery_sweep import build_exact_rule_catalog, write_prospective_freezes
 
 from ai_baby.lottery import (
     Draw,
@@ -110,6 +110,54 @@ class LotteryDataTests(unittest.TestCase):
         self.assertTrue(all(len(d.numbers) == 6 and len(set(d.numbers)) == 6 for d in draws))
 
 
+
+
+    def test_exact_rule_catalog_keeps_full_ticket_and_rank_matches_independently(self):
+        records = {
+            "poor_average_but_exact_once": [
+                {
+                    "target_draw_id": "d1",
+                    "target_date": "2025-01-01",
+                    "history_size": 100,
+                    "prediction": [1, 2, 3, 4, 5],
+                    "actual": [1, 2, 3, 4, 5],
+                    "hits": 5,
+                },
+                {
+                    "target_draw_id": "d2",
+                    "target_date": "2025-01-02",
+                    "history_size": 101,
+                    "prediction": [10, 11, 12, 13, 14],
+                    "actual": [1, 2, 3, 4, 5],
+                    "hits": 0,
+                },
+            ],
+            "rank_one_only": [
+                {
+                    "target_draw_id": "d1",
+                    "target_date": "2025-01-01",
+                    "history_size": 100,
+                    "prediction": [1, 8, 9, 10, 11],
+                    "actual": [1, 2, 3, 4, 5],
+                    "hits": 1,
+                },
+            ],
+        }
+        catalog = build_exact_rule_catalog(
+            "vincicasa", records, "2026-10-28", "fixture.csv", "a" * 64
+        )
+        self.assertEqual(catalog["rule_count_evaluated"], 2)
+        self.assertEqual(len(catalog["full_position_exact_matches"]), 1)
+        exact = catalog["full_position_exact_matches"][0]
+        self.assertEqual(exact["method"], "poor_average_but_exact_once")
+        self.assertEqual(exact["target_draw_id"], "d1")
+        self.assertEqual(len(catalog["rank_exact_matches"]), 6)
+        rank_one = [item for item in catalog["rank_exact_matches"] if item["rank"] == 1]
+        self.assertEqual(len(rank_one), 2)
+        self.assertTrue(all(item["predicted_number"] == item["actual_number"] == 1 for item in rank_one))
+        self.assertTrue(all(item["full_ticket_also_exact"] for item in catalog["rank_exact_matches"] if item["method"] == "poor_average_but_exact_once" and item["target_draw_id"] == "d1"))
+        self.assertEqual(catalog["dataset_sha256"], "a" * 64)
+        self.assertEqual(catalog["rank_summary"][0]["exact_match_count"], 2)
 
     def test_prospective_freeze_records_predictions_and_dataset_hashes(self):
         root = Path(__file__).resolve().parents[1]
