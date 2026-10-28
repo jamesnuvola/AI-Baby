@@ -7,6 +7,7 @@ from pathlib import Path
 
 from ai_baby.lottery import GAME_RULES, load_draws_csv, rolling_origin_backtest
 from ai_baby.position_decoder import chronological_position_decoder
+from ai_baby.trajectory_decoder import chronological_trajectory_decoder
 from ai_baby.lottery_methods import (
     anti_hot,
     exponential_decay,
@@ -33,6 +34,16 @@ def metric(records: list[dict], count: int, population: int) -> dict:
         for record in records
         for pred, actual in zip(record["prediction"], record["actual"])
     )
+    position_count = len(records[0]["prediction"])
+    by_position = []
+    for rank in range(position_count):
+        rank_errors = [abs(int(r["prediction"][rank]) - int(r["actual"][rank])) for r in records]
+        rank_exact = sum(int(r["prediction"][rank]) == int(r["actual"][rank]) for r in records)
+        by_position.append({
+            "rank": rank + 1,
+            "exact_rate": round(rank_exact / len(records), 6),
+            "mae": round(sum(rank_errors) / len(rank_errors), 6),
+        })
     return {
         "n": len(hits),
         "mean_hits": round(sum(hits) / len(hits), 6),
@@ -41,6 +52,7 @@ def metric(records: list[dict], count: int, population: int) -> dict:
         "uniform_expected_mean_hits": round(count * count / population, 6),
         "position_exact_rate": round(position_exact / len(position_errors), 6),
         "position_mae": round(sum(position_errors) / len(position_errors), 6),
+        "by_sorted_rank": by_position,
     }
 
 
@@ -52,6 +64,9 @@ def parameter_grid(run_date: str | None = None) -> dict[str, object]:
         "position_decoder_neighbours20": chronological_position_decoder(neighbours=20),
         "position_decoder_neighbours60": chronological_position_decoder(neighbours=60),
         "position_decoder_neighbours120": chronological_position_decoder(neighbours=120),
+        "trajectory_window3_neighbours40": chronological_trajectory_decoder(window=3, neighbours=40),
+        "trajectory_window5_neighbours60": chronological_trajectory_decoder(window=5, neighbours=60),
+        "trajectory_window8_neighbours80": chronological_trajectory_decoder(window=8, neighbours=80),
         "overdue_first": overdue_first,
         "random_uniform_seed0": random_uniform(0),
     }
@@ -78,6 +93,8 @@ def parameter_grid(run_date: str | None = None) -> dict[str, object]:
     transition_power = 4 + (ordinal % 7)
     gap_neighbours = 41 + (ordinal % 160)
     position_neighbours = 40 + (ordinal % 161)
+    trajectory_window = 3 + (ordinal % 6)
+    trajectory_neighbours = 30 + ((ordinal * 3) % 121)
     methods[f"daily_recent_window{recent_window}"] = recent_frequency(recent_window)
     methods[f"daily_anti_hot_window{anti_hot_window}"] = anti_hot(anti_hot_window)
     methods[f"daily_exponential_decay_tau{tau:g}"] = exponential_decay(tau)
@@ -86,6 +103,7 @@ def parameter_grid(run_date: str | None = None) -> dict[str, object]:
     )
     methods[f"daily_gap_neighbours{gap_neighbours}"] = gap_trajectory_neighbours(gap_neighbours)
     methods[f"daily_position_decoder_neighbours{position_neighbours}"] = chronological_position_decoder(neighbours=position_neighbours)
+    methods[f"daily_trajectory_window{trajectory_window}_neighbours{trajectory_neighbours}"] = chronological_trajectory_decoder(window=trajectory_window, neighbours=trajectory_neighbours)
     return methods
 
 
@@ -146,6 +164,8 @@ def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 1
             "transition_power": 4 + (date.fromisoformat(run_date).toordinal() % 7),
             "gap_neighbours": 41 + (date.fromisoformat(run_date).toordinal() % 160),
             "position_decoder_neighbours": 40 + (date.fromisoformat(run_date).toordinal() % 161),
+            "trajectory_window": 3 + (date.fromisoformat(run_date).toordinal() % 6),
+            "trajectory_neighbours": 30 + ((date.fromisoformat(run_date).toordinal() * 3) % 121),
         },
         "parameter_grid": {
             "recent_windows": [10, 20, 40, 80],
@@ -155,6 +175,8 @@ def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 1
             "transition_power": [1, 2, 3],
             "gap_neighbours": [5, 10, 20, 40],
             "position_decoder_neighbours": [20, 60, 120] + [40 + (date.fromisoformat(run_date).toordinal() % 161)],
+            "trajectory_window": [3, 5, 8, 3 + (date.fromisoformat(run_date).toordinal() % 6)],
+            "trajectory_neighbours": [40, 60, 80, 30 + ((date.fromisoformat(run_date).toordinal() * 3) % 121)],
         },
         "results": results,
         "development_ranking_2023_2024_exploratory_only": ranking,
