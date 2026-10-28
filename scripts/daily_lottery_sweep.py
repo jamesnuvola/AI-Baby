@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 from ai_baby.lottery import GAME_RULES, load_draws_csv, rolling_origin_backtest
@@ -31,7 +31,9 @@ def metric(records: list[dict], count: int, population: int) -> dict:
     }
 
 
-def parameter_grid() -> dict[str, object]:
+def parameter_grid(run_date: str | None = None) -> dict[str, object]:
+    day = date.fromisoformat(run_date) if run_date else datetime.now(timezone.utc).date()
+    ordinal = day.toordinal()
     methods: dict[str, object] = {
         "global_frequency": global_frequency,
         "overdue_first": overdue_first,
@@ -50,10 +52,26 @@ def parameter_grid() -> dict[str, object]:
             )
     for neighbours in (5, 10, 20, 40):
         methods[f"gap_neighbours{neighbours}"] = gap_trajectory_neighbours(neighbours)
+
+    # Daily rotating candidates expand the search space instead of repeating only
+    # the fixed anchors. The ISO date is recorded, so every sweep is reproducible.
+    recent_window = 101 + (ordinal % 200)
+    anti_hot_window = 101 + ((ordinal * 7) % 200)
+    tau = float(1 + (ordinal % 120))
+    transition_overlap = 1 + (ordinal % 4)
+    transition_power = 4 + (ordinal % 7)
+    gap_neighbours = 41 + (ordinal % 160)
+    methods[f"daily_recent_window{recent_window}"] = recent_frequency(recent_window)
+    methods[f"daily_anti_hot_window{anti_hot_window}"] = anti_hot(anti_hot_window)
+    methods[f"daily_exponential_decay_tau{tau:g}"] = exponential_decay(tau)
+    methods[f"daily_transition_overlap{transition_overlap}_power{transition_power}"] = transition_analogue(
+        min_overlap=transition_overlap, power=transition_power
+    )
+    methods[f"daily_gap_neighbours{gap_neighbours}"] = gap_trajectory_neighbours(gap_neighbours)
     return methods
 
 
-def sweep_game(csv_path: str, game: str, minimum_history: int = 100) -> dict:
+def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 100) -> dict:
     draws = load_draws_csv(csv_path, game=game)
     if len(draws) <= minimum_history:
         raise ValueError(f"not enough {game} draws for minimum_history={minimum_history}")
@@ -67,7 +85,7 @@ def sweep_game(csv_path: str, game: str, minimum_history: int = 100) -> dict:
         raise ValueError(f"not enough pre-2022 warm-up history for {game}")
     draws = draws[first_target_index - minimum_history:]
     rules = GAME_RULES[game]
-    methods = parameter_grid()
+    methods = parameter_grid(run_date)
     results = {}
     for name, predictor in methods.items():
         backtest = rolling_origin_backtest(draws, predictor, minimum_history=minimum_history)
@@ -100,7 +118,16 @@ def sweep_game(csv_path: str, game: str, minimum_history: int = 100) -> dict:
         "first_target_date": draws[minimum_history].draw_date.isoformat(),
         "last_draw_date": draws[-1].draw_date.isoformat(),
         "minimum_history": minimum_history,
+        "sweep_date_utc": run_date,
         "method_count": len(methods),
+        "daily_rotating_parameters": {
+            "recent_window": 101 + (date.fromisoformat(run_date).toordinal() % 200),
+            "anti_hot_window": 101 + ((date.fromisoformat(run_date).toordinal() * 7) % 200),
+            "decay_tau": float(1 + (date.fromisoformat(run_date).toordinal() % 120)),
+            "transition_overlap": 1 + (date.fromisoformat(run_date).toordinal() % 4),
+            "transition_power": 4 + (date.fromisoformat(run_date).toordinal() % 7),
+            "gap_neighbours": 41 + (date.fromisoformat(run_date).toordinal() % 160),
+        },
         "parameter_grid": {
             "recent_windows": [10, 20, 40, 80],
             "anti_hot_windows": [10, 20, 40],
@@ -125,10 +152,10 @@ def main() -> None:
         "status": "exploratory; no model promotion",
         "games": {
             "superenalotto": sweep_game(
-                "data/superenalotto_snapshot_2026-10-27.csv", "superenalotto"
+                "data/superenalotto_snapshot_2026-10-27.csv", "superenalotto", now.date().isoformat()
             ),
             "vincicasa": sweep_game(
-                "data/vincicasa_snapshot_2026-10-27.csv", "vincicasa"
+                "data/vincicasa_snapshot_2026-10-27.csv", "vincicasa", now.date().isoformat()
             ),
         },
         "next_required_step": "Refresh official source data and score frozen prospective predictions before claiming any edge.",
