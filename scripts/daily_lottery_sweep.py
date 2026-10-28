@@ -144,8 +144,8 @@ def build_exact_rule_catalog(
                         "actual_number": actual_number,
                         "full_ticket_also_exact": prediction == actual,
                     })
-    full_exact.sort(key=lambda item: (item["target_date"], item["method"], item["target_draw_id"]))
-    rank_exact.sort(key=lambda item: (item["target_date"], item["rank"], item["method"], item["target_draw_id"]))
+    full_exact.sort(key=lambda item: (item["target_date"], item["method"], item["target_draw_id"]), reverse=True)
+    rank_exact.sort(key=lambda item: (item["target_date"], item["rank"], item["method"], item["target_draw_id"]), reverse=True)
     first_records = next(iter(records_by_method.values()), [])
     rank_count = len(first_records[0]["prediction"]) if first_records else 0
     return {
@@ -221,10 +221,10 @@ def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 1
     catalog_dir = Path("reports/continuous")
     catalog_dir.mkdir(parents=True, exist_ok=True)
     (catalog_dir / f"exact-rule-catalog-{game}-{run_date}.json").write_text(
-        json.dumps(exact_catalog, indent=2, sort_keys=True) + "\\n", encoding="utf-8"
+        json.dumps(exact_catalog, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     (catalog_dir / f"exact-rule-catalog-{game}-latest.json").write_text(
-        json.dumps(exact_catalog, indent=2, sort_keys=True) + "\\n", encoding="utf-8"
+        json.dumps(exact_catalog, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     return {
         "exact_rule_catalog": {
