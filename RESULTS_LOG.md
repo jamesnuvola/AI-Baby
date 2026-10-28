@@ -109,3 +109,18 @@ Questo registro conserva risultati positivi e negativi. Aggiungere nuove prove i
 - **Limiti:** risultato circoscritto a cinque famiglie sintetiche e tre varianti ciascuna; non dimostra generalizzazione su dati reali o sequenze rumorose/non polinomiali. `newton3` è un bias matematico esplicito, non auto-riprogrammazione.
 - **Report persistente:** `reports/benchmark-report.md`, `reports/benchmark-report.json`, `reports/HISTORY.md` e snapshot `reports/history/run-6-attempt-1.*`.
 - **Prossimo esperimento prioritario:** test di stress su sequenze rumorose, cambi di regime e famiglie non polinomiali, per misurare quando `newton3` aiuta e quando porta a sovraestrapolazione; mantenere separati sviluppo e test bloccato.
+
+
+## EXP-008 — Primo laboratorio su estrazioni reali: dati, baseline e metodi eterogenei
+
+- **Stato:** primo confronto esplorativo registrato il 2026-10-28; il runner e i due dataset hanno superato la CI completa al commit `ff7ea60560c8fb40b82426ba2f0b418e19ea8a75` (test Python 3.10–3.13 e job benchmark su entrambi i giochi). Commit successivi in questa PR aggiornano report/documentazione.
+- **Dataset persistenti:**
+  - SuperEnalotto: `data/superenalotto_snapshot_2026-10-27.csv`, 2.943 sestine dal 2009-01-02 al 2026-10-27. Le nove estrazioni dal 13 al 27 ottobre sono state verificate contro l'archivio ufficiale; lo storico precedente proviene da uno snapshot di progetto e non è stato ricontrollato concorso per concorso.
+  - VinciCasa: `data/vincicasa_snapshot_2026-10-27.csv`, 3.390 cinquine dal 2017-07-17 al 2026-10-27. Ultima estrazione 1-6-8-28-34 verificata nell'archivio ufficiale.
+  - Manifesti JSON con provenienza, SHA e limiti: `data/*manifest.json`.
+- **Infrastruttura aggiunta:** validazione CSV e regole dei due giochi, scoring dei match, baseline uniforme teorica e Monte Carlo riproducibile, valutatore rolling-origin senza leakage, importatore dello storico SuperEnalotto, cinque euristiche eterogenee e runner di benchmark.
+- **Metodi confrontati:** frequenza globale, frequenza ultime 20, anti-hot ultime 20, decadimento esponenziale τ=10 e ritardatari-first. Le previsioni sono valutate solo contro estrazioni successive alla rispettiva storia disponibile.
+- **Baseline teorica:** SuperEnalotto 0,4000 match medi per sestina; VinciCasa 0,6250 match medi per cinquina.
+- **Risultati esplorativi:** vedi `reports/LOTTERY_EXP008_INITIAL_BACKTEST_2026-10-28.md`. SuperEnalotto: medie complessive 0,3795–0,4077; nessuna regola mostra vantaggio stabile fra i segmenti. VinciCasa: medie complessive 0,6085–0,6264; il metodo ritardatari-first passa da 0,6689 nel 2023–2024 a 0,6075 nel 2025+, mentre altre regole cambiano anch'esse direzione tra periodi.
+- **Interpretazione:** nessun metodo promosso e nessuna capacità predittiva dimostrata. Le finestre 2023–2024 e 2025+ sono state già esplorate in precedenti ricerche SONAR, quindi non costituiscono un test cieco nuovo. Le differenze sono descrittive e soggette a selezione multipla.
+- **Prossimo esperimento:** esplorare transizioni, gap, codifiche posizionali, regimi e interazioni non convenzionali; congelare le ipotesi prima delle verifiche prospettiche e conservare tutti gli esiti, anche negativi.
