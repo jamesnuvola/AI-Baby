@@ -5,9 +5,14 @@ from scripts.daily_lottery_sweep import parameter_grid
 
 class DailyLotterySweepTests(unittest.TestCase):
     def test_parameter_grid_is_diverse_and_deterministic(self):
-        first = parameter_grid()
-        second = parameter_grid()
+        first = parameter_grid("2026-10-28")
+        second = parameter_grid("2026-10-28")
+        next_day = parameter_grid("2026-10-29")
         self.assertEqual(list(first), list(second))
+        self.assertNotEqual(
+            {k for k in first if k.startswith("daily_")},
+            {k for k in next_day if k.startswith("daily_")},
+        )
         self.assertGreaterEqual(len(first), 25)
         self.assertIn("recent_frequency_window10", first)
         self.assertIn("recent_frequency_window80", first)
