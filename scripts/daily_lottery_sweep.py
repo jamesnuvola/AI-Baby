@@ -296,7 +296,7 @@ def write_prospective_freezes(now: datetime, outdir: Path) -> None:
         digest = hashlib.sha256(dataset.read_bytes()).hexdigest()
         predictions = {}
         for name, predictor in methods.items():
-            values = tuple(int(n) for n in predictor(tuple(draws)))
+            values = tuple(sorted(int(n) for n in predictor(tuple(draws))))
             if len(values) != len(set(values)) or tuple(sorted(values)) != values:
                 raise ValueError(f"{name} returned invalid prediction for {game}: {values}")
             predictions[name] = list(values)
