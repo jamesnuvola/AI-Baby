@@ -1,6 +1,6 @@
 {
   "frozen_at": "2026-10-28T11:06:13+01:00",
-  "code_revision": "9b715093cd302f631ff14d7b69cc92962ecd3ef0",
+  "code_revision": "0c91fdb47db70c4c428cb1cc69a46b62fa2317ae",
   "data_cutoff": "2026-10-27",
   "evaluation_policy": "Score every registered method after the target draw. Do not select or retune methods after seeing the outcome.",
   "status": "FROZEN_BEFORE_TARGET; shadow evaluation only; no method promoted",
