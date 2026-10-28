@@ -1,7 +1,10 @@
 import tempfile
+import json
 import unittest
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
+
+from scripts.daily_lottery_sweep import build_exact_rule_catalog, write_prospective_freezes
 
 from ai_baby.lottery import (
     Draw,
@@ -105,6 +108,85 @@ class LotteryDataTests(unittest.TestCase):
         self.assertEqual(draws[-1].draw_date, date(2026, 10, 27))
         self.assertEqual(draws[-1].numbers, (23, 34, 44, 48, 64, 70))
         self.assertTrue(all(len(d.numbers) == 6 and len(set(d.numbers)) == 6 for d in draws))
+
+
+
+
+    def test_exact_rule_catalog_keeps_full_ticket_and_rank_matches_independently(self):
+        records = {
+            "poor_average_but_exact_once": [
+                {
+                    "target_draw_id": "d1",
+                    "target_date": "2025-01-01",
+                    "history_size": 100,
+                    "prediction": [1, 2, 3, 4, 5],
+                    "actual": [1, 2, 3, 4, 5],
+                    "hits": 5,
+                },
+                {
+                    "target_draw_id": "d2",
+                    "target_date": "2025-01-02",
+                    "history_size": 101,
+                    "prediction": [10, 11, 12, 13, 14],
+                    "actual": [1, 2, 3, 4, 5],
+                    "hits": 0,
+                },
+            ],
+            "rank_one_only": [
+                {
+                    "target_draw_id": "d1",
+                    "target_date": "2025-01-01",
+                    "history_size": 100,
+                    "prediction": [1, 8, 9, 10, 11],
+                    "actual": [1, 2, 3, 4, 5],
+                    "hits": 1,
+                },
+            ],
+        }
+        catalog = build_exact_rule_catalog(
+            "vincicasa", records, "2026-10-28", "fixture.csv", "a" * 64
+        )
+        self.assertEqual(catalog["rule_count_evaluated"], 2)
+        self.assertEqual(len(catalog["full_position_exact_matches"]), 1)
+        exact = catalog["full_position_exact_matches"][0]
+        self.assertEqual(exact["method"], "poor_average_but_exact_once")
+        self.assertEqual(exact["target_draw_id"], "d1")
+        self.assertEqual(len(catalog["rank_exact_matches"]), 6)
+        rank_one = [item for item in catalog["rank_exact_matches"] if item["rank"] == 1]
+        self.assertEqual(len(rank_one), 2)
+        self.assertTrue(all(item["predicted_number"] == item["actual_number"] == 1 for item in rank_one))
+        self.assertTrue(all(item["full_ticket_also_exact"] for item in catalog["rank_exact_matches"] if item["method"] == "poor_average_but_exact_once" and item["target_draw_id"] == "d1"))
+        self.assertEqual(catalog["dataset_sha256"], "a" * 64)
+        self.assertEqual(catalog["rank_summary"][0]["exact_match_count"], 2)
+
+    def test_prospective_freeze_records_predictions_and_dataset_hashes(self):
+        root = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as tmp:
+            outdir = Path(tmp)
+            write_prospective_freezes(
+                datetime(2026, 10, 28, 18, 0, tzinfo=timezone.utc), outdir
+            )
+            for game, count, maximum, expected_latest in (
+                ("vincicasa", 5, 40, "2026-10-27"),
+                ("superenalotto", 6, 90, "2026-10-27"),
+            ):
+                path = outdir / f"prospective-{game}-latest.json"
+                record = json.loads(path.read_text(encoding="utf-8"))
+                self.assertEqual(record["record_type"], "prospective_prediction_freeze")
+                self.assertEqual(record["history"]["latest_draw_date"], expected_latest)
+                self.assertEqual(len(record["history"]["sha256"]), 64)
+                self.assertEqual(record["history"]["sha256"], __import__("hashlib").sha256(
+                    (root / record["history"]["dataset_path"]).read_bytes()
+                ).hexdigest())
+                self.assertIsNone(record["target"]["draw_date"])
+                self.assertEqual(record["evaluation_status"], "pending; score only after the target draw is published")
+                self.assertEqual(len(record["predictions"]), 3)
+                for prediction in record["predictions"].values():
+                    self.assertEqual(len(prediction), count)
+                    self.assertEqual(prediction, sorted(set(prediction)))
+                    self.assertTrue(all(1 <= n <= maximum for n in prediction))
+                dated = list(outdir.glob(f"prospective-{game}-20261028T180000Z.json"))
+                self.assertEqual(len(dated), 1)
 
 
 if __name__ == "__main__":

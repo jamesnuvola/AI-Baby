@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from datetime import date, datetime, timezone
 from pathlib import Path
 
@@ -107,6 +108,73 @@ def parameter_grid(run_date: str | None = None) -> dict[str, object]:
     return methods
 
 
+def build_exact_rule_catalog(
+    game: str,
+    records_by_method: dict[str, list[dict]],
+    run_date: str,
+    dataset_path: str,
+    dataset_sha256: str,
+) -> dict:
+    """Archive every historical exact full-ticket and rank-level rule hit."""
+    full_exact = []
+    rank_exact = []
+    for method_name, records in sorted(records_by_method.items()):
+        for record in records:
+            prediction = [int(n) for n in record["prediction"]]
+            actual = [int(n) for n in record["actual"]]
+            common = {
+                "method": method_name,
+                "target_draw_id": record["target_draw_id"],
+                "target_date": record["target_date"],
+                "history_size": int(record["history_size"]),
+                "prediction": prediction,
+                "actual": actual,
+            }
+            if prediction == actual:
+                full_exact.append({**common, "match_type": "all_sorted_positions_exact"})
+            for rank, (predicted_number, actual_number) in enumerate(zip(prediction, actual), start=1):
+                if predicted_number == actual_number:
+                    rank_exact.append({
+                        "method": method_name,
+                        "target_draw_id": record["target_draw_id"],
+                        "target_date": record["target_date"],
+                        "history_size": int(record["history_size"]),
+                        "rank": rank,
+                        "predicted_number": predicted_number,
+                        "actual_number": actual_number,
+                        "full_ticket_also_exact": prediction == actual,
+                    })
+    full_exact.sort(key=lambda item: (item["target_date"], item["method"], item["target_draw_id"]))
+    rank_exact.sort(key=lambda item: (item["target_date"], item["rank"], item["method"], item["target_draw_id"]))
+    first_records = next(iter(records_by_method.values()), [])
+    rank_count = len(first_records[0]["prediction"]) if first_records else 0
+    return {
+        "schema_version": 1,
+        "record_type": "historical_exact_rule_catalog",
+        "game": game,
+        "generated_for_date_utc": run_date,
+        "dataset_path": dataset_path,
+        "dataset_sha256": dataset_sha256,
+        "rule_count_evaluated": len(records_by_method),
+        "full_position_exact_matches": full_exact,
+        "rank_exact_matches": rank_exact,
+        "rank_summary": [
+            {
+                "rank": rank,
+                "exact_match_count": sum(item["rank"] == rank for item in rank_exact),
+                "distinct_methods_with_exact_match": sorted({
+                    item["method"] for item in rank_exact if item["rank"] == rank
+                }),
+            }
+            for rank in range(1, rank_count + 1)
+        ],
+        "interpretation": (
+            "Keep all exact historical rule hits for later flow analysis. These are in-sample discovery results; "
+            "they do not alone establish prospective predictive power."
+        ),
+    }
+
+
 def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 100) -> dict:
     draws = load_draws_csv(csv_path, game=game)
     if len(draws) <= minimum_history:
@@ -123,10 +191,12 @@ def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 1
     rules = GAME_RULES[game]
     methods = parameter_grid(run_date)
     results = {}
+    records_by_method = {}
     for name, predictor in methods.items():
         backtest = rolling_origin_backtest(draws, predictor, minimum_history=minimum_history)
         records = backtest["records"]
         assert isinstance(records, list)
+        records_by_method[name] = records
         segments = {
             "all": records,
             "2023_2024_exploratory": [
@@ -146,9 +216,25 @@ def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 1
             name,
         ),
     )
+    dataset_sha256 = hashlib.sha256(Path(csv_path).read_bytes()).hexdigest()
+    exact_catalog = build_exact_rule_catalog(game, records_by_method, run_date, csv_path, dataset_sha256)
+    catalog_dir = Path("reports/continuous")
+    catalog_dir.mkdir(parents=True, exist_ok=True)
+    (catalog_dir / f"exact-rule-catalog-{game}-{run_date}.json").write_text(
+        json.dumps(exact_catalog, indent=2, sort_keys=True) + "\\n", encoding="utf-8"
+    )
+    (catalog_dir / f"exact-rule-catalog-{game}-latest.json").write_text(
+        json.dumps(exact_catalog, indent=2, sort_keys=True) + "\\n", encoding="utf-8"
+    )
     return {
+        "exact_rule_catalog": {
+            "full_position_exact_count": len(exact_catalog["full_position_exact_matches"]),
+            "rank_exact_match_count": len(exact_catalog["rank_exact_matches"]),
+            "dated_path": f"reports/continuous/exact-rule-catalog-{game}-{run_date}.json",
+        },
         "game": game,
         "dataset": csv_path,
+        "dataset_sha256": dataset_sha256,
         "draw_count_in_scored_window": len(draws) - minimum_history,
         "history_start_date": draws[0].draw_date.isoformat(),
         "first_target_date": draws[minimum_history].draw_date.isoformat(),
@@ -183,6 +269,70 @@ def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 1
         "selection_policy": "No automatic promotion. Ranking is exploratory only; all methods remain in the report.",
         "warning": "2023-2024 and 2025+ were previously explored; neither is an untouched blind holdout. Repeated parameter sweeps inflate apparent best scores.",
     }
+
+
+def write_prospective_freezes(now: datetime, outdir: Path) -> None:
+    """Persist dated predictions before future draws, with input hashes and model configs."""
+    from ai_baby.lottery_methods import global_frequency
+
+    stamp = now.strftime("%Y%m%dT%H%M%SZ")
+    datasets = {
+        "superenalotto": Path("data/superenalotto_snapshot_2026-10-27.csv"),
+        "vincicasa": Path("data/vincicasa_snapshot_2026-10-27.csv"),
+    }
+    methods = {
+        "chronological_trajectory_decoder_w8_n80_tau500": chronological_trajectory_decoder(
+            window=8, neighbours=80, recency_tau=500.0
+        ),
+        "chronological_position_decoder_n120_tau500": chronological_position_decoder(
+            neighbours=120, recency_tau=500.0
+        ),
+        "global_frequency": global_frequency,
+    }
+    for game, dataset in datasets.items():
+        draws = load_draws_csv(dataset, game=game)
+        if len(draws) < 100:
+            raise ValueError(f"refusing to freeze {game}: only {len(draws)} historical draws")
+        digest = hashlib.sha256(dataset.read_bytes()).hexdigest()
+        predictions = {}
+        for name, predictor in methods.items():
+            values = tuple(sorted(int(n) for n in predictor(tuple(draws))))
+            if len(values) != len(set(values)) or tuple(sorted(values)) != values:
+                raise ValueError(f"{name} returned invalid prediction for {game}: {values}")
+            predictions[name] = list(values)
+        latest = draws[-1]
+        record = {
+            "schema_version": 1,
+            "record_type": "prospective_prediction_freeze",
+            "created_at_utc": now.isoformat(),
+            "game": game,
+            "target": {
+                "draw_id": None,
+                "draw_date": None,
+                "definition": "first official draw after latest_draw; target date intentionally unknown at freeze time",
+            },
+            "history": {
+                "dataset_path": dataset.as_posix(),
+                "sha256": digest,
+                "draw_count": len(draws),
+                "first_draw_date": draws[0].draw_date.isoformat(),
+                "latest_draw_id": latest.draw_id,
+                "latest_draw_date": latest.draw_date.isoformat(),
+                "latest_draw_numbers": list(latest.numbers),
+            },
+            "predictions": predictions,
+            "evaluation_status": "pending; score only after the target draw is published",
+            "scientific_warning": (
+                "Exploratory lottery predictions only; this record does not establish a predictive edge "
+                "or increase the known probability of winning."
+            ),
+        }
+        dated = outdir / f"prospective-{game}-{stamp}.json"
+        dated.write_text(json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        (outdir / f"prospective-{game}-latest.json").write_text(
+            json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        print(f"Frozen {game} prospective predictions: {predictions} ({dated})")
 
 
 def main() -> None:
@@ -244,6 +394,7 @@ def main() -> None:
         lines.append("")
     (outdir / f"{now.date().isoformat()}.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     (outdir / "latest.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    write_prospective_freezes(now, outdir)
     print(f"Generated daily parameter sweep for {len(report['games'])} games.")
     print(f"Methods per game: {len(parameter_grid())}; output: {outdir}")
 
