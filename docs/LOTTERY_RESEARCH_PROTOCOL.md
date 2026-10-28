@@ -33,3 +33,10 @@ Explore conventional and non-conventional ideas, including position-aware repres
 
 ## Current implementation status
 `ai_baby/lottery.py` supplies data validation, CSV loading, exact-hit scoring, a reproducible uniform Monte Carlo baseline, and a generic rolling-origin evaluator. Unit tests cover these primitives. No real lottery dataset or positive predictive edge is claimed by this module. Dataset acquisition and provenance verification are the next gate.
+
+## Initial source audit (2026-10-28)
+- SuperEnalotto candidate source: [jamesnuvola/Superenalotto `src/data/draws.js`](https://github.com/jamesnuvola/Superenalotto/blob/main/src/data/draws.js). Its documented rows cover 2009 onward, but the checked snapshot currently ends on 2026-10-10 (2,934 rows). It is therefore **not current enough** for a production backtest without refreshing and checking against the official archive.
+- Official SuperEnalotto archive: https://www.superenalotto.it/archivio-estrazioni . It exposes the main six numbers plus supplementary Jolly/SuperStar; only the main six are the primary target.
+- Official VinciCasa archive: https://www.vincicasa.it/archivio-estrazioni . It offers recent draws and year-based historical archives; the data needs to be acquired and validated separately.
+- Import helper: `python -m scripts.import_superenalotto_js path/to/draws.js data/superenalotto.csv`. It parses the documented source format and intentionally excludes Jolly/SuperStar. The importer does not download data or certify the source as complete.
+- No historic rows are copied into this repository yet. Keep source snapshots and their retrieval dates explicit; never treat a source's claimed “historical” coverage as verified completeness.
