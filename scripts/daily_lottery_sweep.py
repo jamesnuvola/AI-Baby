@@ -145,7 +145,7 @@ def build_exact_rule_catalog(
                         "full_ticket_also_exact": prediction == actual,
                     })
     full_exact.sort(key=lambda item: (item["target_date"], item["method"], item["target_draw_id"]), reverse=True)
-    rank_exact.sort(key=lambda item: (item["target_date"], item["rank"], item["method"], item["target_draw_id"]), reverse=True)
+    rank_exact.sort(key=lambda item: (item["target_date"], -item["rank"], item["method"], item["target_draw_id"]), reverse=True)
     first_records = next(iter(records_by_method.values()), [])
     rank_count = len(first_records[0]["prediction"]) if first_records else 0
     return {
