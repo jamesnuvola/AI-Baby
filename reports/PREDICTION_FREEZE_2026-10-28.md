@@ -2,7 +2,7 @@
 
 **Frozen at:** 2026-10-28 11:06:13 Europe/Rome  
 **Data cutoff:** 2026-10-27  
-**Code revision:** `9b715093cd302f631ff14d7b69cc92962ecd3ef0`  
+**Code revision:** `0c91fdb47db70c4c428cb1cc69a46b62fa2317ae`  
 **Status:** frozen shadow test; not a validated prediction system.
 
 The candidate sets below are recorded before the target draws. Every method will be scored after the result; none may be selected or retuned using these outcomes. This is a research record, not a recommendation to wager.
