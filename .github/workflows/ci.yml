@@ -31,7 +31,7 @@ jobs:
       - name: Run demo smoke test
         run: python -m ai_baby.cli demo --db /tmp/ai_baby_ci.sqlite --budget 20000
       - name: Run lottery benchmark smoke test
-        if: matrix.python-version == "3.12"
+        if: ${{ matrix.python-version == '3.12' }}
         run: |
           python -m scripts.lottery_benchmark data/superenalotto_snapshot_2026-10-27.csv --game superenalotto --minimum-history 100 --simulations 10 --output /tmp/superenalotto-exp008.json
           python -m scripts.lottery_benchmark data/vincicasa_snapshot_2026-10-27.csv --game vincicasa --minimum-history 100 --simulations 10 --output /tmp/vincicasa-exp008.json
