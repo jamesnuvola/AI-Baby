@@ -124,3 +124,22 @@ Questo registro conserva risultati positivi e negativi. Aggiungere nuove prove i
 - **Risultati esplorativi:** vedi `reports/LOTTERY_EXP008_INITIAL_BACKTEST_2026-10-28.md`. SuperEnalotto: medie complessive 0,3795–0,4077; nessuna regola mostra vantaggio stabile fra i segmenti. VinciCasa: medie complessive 0,6085–0,6264; il metodo ritardatari-first passa da 0,6689 nel 2023–2024 a 0,6075 nel 2025+, mentre altre regole cambiano anch'esse direzione tra periodi.
 - **Interpretazione:** nessun metodo promosso e nessuna capacità predittiva dimostrata. Le finestre 2023–2024 e 2025+ sono state già esplorate in precedenti ricerche SONAR, quindi non costituiscono un test cieco nuovo. Le differenze sono descrittive e soggette a selezione multipla.
 - **Prossimo esperimento:** esplorare transizioni, gap, codifiche posizionali, regimi e interazioni non convenzionali; congelare le ipotesi prima delle verifiche prospettiche e conservare tutti gli esiti, anche negativi.
+
+
+## EXP-009 — Analogie di transizione e geometria dei gap
+
+- **Stato:** metodi implementati; unit test superati da GitHub Actions al commit `ef64ce0100fcb1b7ae6a5f09e6cb6dee7d24c311`. La CI aggiornata con verifica del freeze prospettico è in corso nella PR #4.
+- **Metodi:** `transition_analogue` vota i numeri delle estrazioni-successore di stati storici con overlap almeno 2, peso overlap^3; `gap_trajectory_neighbours` trova i 20 stati con geometria dei gap più vicina (distanza L1) e vota i loro successori con peso 1/(1+distance).
+- **SuperEnalotto (baseline 0,4000):** transition analogue — 0,4034 su tutto il periodo, 0,3974 nel 2023–2024, 0,3868 nel 2025+; gap nearest20 — 0,3887, 0,4385, 0,3737. Nessun vantaggio stabile.
+- **VinciCasa (baseline 0,6250):** transition analogue — 0,6249, 0,6553, 0,6361; gap nearest20 — 0,6261, 0,6279, 0,6797 rispettivamente su tutto, 2023–2024 e 2025+.
+- **Osservazione interessante ma non confermativa:** VinciCasa gap nearest20 nel periodo 2025+ ha 93/665 target con almeno 2 hit (13,98%), contro circa 10,88% atteso uniformemente. Lo scarto nominale è circa 2,57 deviazioni standard su questa singola metrica; dopo molti metodi/segmenti/metriche e dato che il periodo era già esplorato, non è evidenza indipendente e non si promuove il metodo.
+- **Report persistente:** `reports/LOTTERY_EXP009_STRUCTURAL_ANALOGUES_2026-10-28.md`.
+
+## EXP-010 — Freeze prospettico pre-estrazione
+
+- **Stato:** record congelato alle 2026-10-28 11:06:13 Europe/Rome; verifica automatica del freeze aggiunta al workflow CI.
+- **Target:** VinciCasa 2026-10-28 e SuperEnalotto 2026-10-29; cutoff dati 2026-10-27.
+- **Record immutabile:** `reports/PREDICTION_FREEZE_2026-10-28.md` e `reports/prediction-freeze-2026-10-28.json`.
+- **Metodi congelati:** frequenza globale, frequenza ultime 20, anti-hot, decadimento esponenziale, ritardatari-first, transition analogue, gap-trajectory nearest20 e controllo uniforme seed 0.
+- **Regola:** dopo ogni estrazione si valutano tutti i metodi; non eliminare né ritoccare retroattivamente un metodo in base all'esito. Una singola estrazione non può confermare un vantaggio.
+- **Scopo:** iniziare un shadow test prospettico con cutoff e previsioni verificabili, non raccomandare puntate.
