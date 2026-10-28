@@ -80,6 +80,14 @@ class LotteryDataTests(unittest.TestCase):
         self.assertEqual(report["mean_hits"], 5.0)
         self.assertEqual(report["theoretical_uniform_mean_hits"], 0.625)
 
+    def test_pinned_superenalotto_snapshot_is_valid_and_stale_as_documented(self):
+        root = Path(__file__).resolve().parents[1]
+        draws = load_draws_csv(root / "data" / "superenalotto_snapshot_2026-10-10.csv", game="superenalotto")
+        self.assertEqual(len(draws), 2934)
+        self.assertEqual(draws[0].draw_date, date(2009, 1, 2))
+        self.assertEqual(draws[-1].draw_date, date(2026, 10, 10))
+        self.assertTrue(all(len(d.numbers) == 6 and len(set(d.numbers)) == 6 for d in draws))
+
 
 if __name__ == "__main__":
     unittest.main()
