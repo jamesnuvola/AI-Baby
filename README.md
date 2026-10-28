@@ -2,7 +2,7 @@
 
 **Prototipo di ricerca cognitiva sperimentale.** AI Baby 0.2 esplora espressioni matematiche composizionali in un DSL esplicito, misura le prestazioni rispetto a una baseline e registra gli esperimenti in SQLite.
 
-> **Stato scientifico:** proof of concept. I risultati attuali sono limitati a una sequenza sintetica; non dimostrano intelligenza generale o capacità predittive su dati reali.
+> **Stato scientifico:** proof of concept. I benchmark matematici sintetici sono separati dal nuovo laboratorio esplorativo sulle estrazioni reali. Nessun vantaggio predittivo sulle lotterie è stato dimostrato.
 
 ## Avvio rapido
 
@@ -42,6 +42,30 @@ Il workflow è stato aggiunto e il suo file è stato verificato nella repository
 - `docs/ARCHITECTURE.md`: architettura e limiti.
 
 Ogni prova dovrebbe riportare commit, dati, split, budget, baseline, metriche, risorse, esito e limiti. Non selezionare candidati in base al test finale.
+
+## Laboratorio sperimentale SuperEnalotto / VinciCasa
+
+AI Baby include ora un laboratorio distinto per testare eventuali segnali predittivi nelle estrazioni reali. I due giochi sono valutati separatamente; ogni metodo usa soltanto estrazioni precedenti al target.
+
+- Dati canonici e manifesti di provenienza: `data/superenalotto_snapshot_2026-10-27.csv`, `data/vincicasa_snapshot_2026-10-27.csv` e i corrispondenti `.manifest.json`.
+- Protocollo e limiti: `docs/LOTTERY_RESEARCH_PROTOCOL.md`.
+- Metodi iniziali e risultati: `reports/LOTTERY_EXP008_INITIAL_BACKTEST_2026-10-28.md`.
+- Analogie di transizione e gap: `reports/LOTTERY_EXP009_STRUCTURAL_ANALOGUES_2026-10-28.md`.
+- Registro persistente: `RESULTS_LOG.md`.
+- Validazione dati, scoring, baseline e walk-forward: `ai_baby/lottery.py`.
+- Metodi sperimentali: `ai_baby/lottery_methods.py`.
+- Runner benchmark: `scripts/lottery_benchmark.py`.
+- Freeze prospettico: `reports/PREDICTION_FREEZE_2026-10-28.md` e il corrispondente JSON.
+
+Esempio di benchmark:
+
+```bash
+python -m scripts.lottery_benchmark data/vincicasa_snapshot_2026-10-27.csv --game vincicasa --minimum-history 100 --simulations 500 --output reports/exp008-vincicasa.json
+```
+
+Il freeze prospettico conserva le previsioni di tutti i metodi prima delle estrazioni successive; il workflow CI verifica che il file generato coincida con il record congelato.
+
+**Importante:** le finestre storiche 2023–2024 e 2025+ sono già state esplorate in precedenti ricerche SONAR e non sono un test cieco nuovo. I risultati sono esplorativi, instabili e non provano un vantaggio; nessun metodo viene promosso in base a un singolo periodo o a una coincidenza.
 
 ## Limiti tecnici
 
