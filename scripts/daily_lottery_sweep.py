@@ -6,6 +6,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 from ai_baby.lottery import GAME_RULES, load_draws_csv, rolling_origin_backtest
+from ai_baby.position_decoder import chronological_position_decoder
 from ai_baby.lottery_methods import (
     anti_hot,
     exponential_decay,
@@ -20,14 +21,26 @@ from ai_baby.lottery_methods import (
 
 def metric(records: list[dict], count: int, population: int) -> dict:
     if not records:
-        return {"n": 0, "mean_hits": None, "p_ge2": None, "p_ge3": None}
+        return {"n": 0, "mean_hits": None, "p_ge2": None, "p_ge3": None, "position_exact_rate": None, "position_mae": None}
     hits = [int(r["hits"]) for r in records]
+    position_errors = [
+        abs(int(pred) - int(actual))
+        for record in records
+        for pred, actual in zip(record["prediction"], record["actual"])
+    ]
+    position_exact = sum(
+        int(pred) == int(actual)
+        for record in records
+        for pred, actual in zip(record["prediction"], record["actual"])
+    )
     return {
         "n": len(hits),
         "mean_hits": round(sum(hits) / len(hits), 6),
         "p_ge2": round(sum(h >= 2 for h in hits) / len(hits), 6),
         "p_ge3": round(sum(h >= 3 for h in hits) / len(hits), 6),
         "uniform_expected_mean_hits": round(count * count / population, 6),
+        "position_exact_rate": round(position_exact / len(position_errors), 6),
+        "position_mae": round(sum(position_errors) / len(position_errors), 6),
     }
 
 
@@ -36,6 +49,9 @@ def parameter_grid(run_date: str | None = None) -> dict[str, object]:
     ordinal = day.toordinal()
     methods: dict[str, object] = {
         "global_frequency": global_frequency,
+        "position_decoder_neighbours20": chronological_position_decoder(neighbours=20),
+        "position_decoder_neighbours60": chronological_position_decoder(neighbours=60),
+        "position_decoder_neighbours120": chronological_position_decoder(neighbours=120),
         "overdue_first": overdue_first,
         "random_uniform_seed0": random_uniform(0),
     }
@@ -61,6 +77,7 @@ def parameter_grid(run_date: str | None = None) -> dict[str, object]:
     transition_overlap = 1 + (ordinal % 4)
     transition_power = 4 + (ordinal % 7)
     gap_neighbours = 41 + (ordinal % 160)
+    position_neighbours = 40 + (ordinal % 161)
     methods[f"daily_recent_window{recent_window}"] = recent_frequency(recent_window)
     methods[f"daily_anti_hot_window{anti_hot_window}"] = anti_hot(anti_hot_window)
     methods[f"daily_exponential_decay_tau{tau:g}"] = exponential_decay(tau)
@@ -68,6 +85,7 @@ def parameter_grid(run_date: str | None = None) -> dict[str, object]:
         min_overlap=transition_overlap, power=transition_power
     )
     methods[f"daily_gap_neighbours{gap_neighbours}"] = gap_trajectory_neighbours(gap_neighbours)
+    methods[f"daily_position_decoder_neighbours{position_neighbours}"] = chronological_position_decoder(neighbours=position_neighbours)
     return methods
 
 
@@ -127,6 +145,7 @@ def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 1
             "transition_overlap": 1 + (date.fromisoformat(run_date).toordinal() % 4),
             "transition_power": 4 + (date.fromisoformat(run_date).toordinal() % 7),
             "gap_neighbours": 41 + (date.fromisoformat(run_date).toordinal() % 160),
+            "position_decoder_neighbours": 40 + (date.fromisoformat(run_date).toordinal() % 161),
         },
         "parameter_grid": {
             "recent_windows": [10, 20, 40, 80],
@@ -135,6 +154,7 @@ def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 1
             "transition_min_overlap": [1, 2, 3],
             "transition_power": [1, 2, 3],
             "gap_neighbours": [5, 10, 20, 40],
+            "position_decoder_neighbours": [20, 60, 120] + [40 + (date.fromisoformat(run_date).toordinal() % 161)],
         },
         "results": results,
         "development_ranking_2023_2024_exploratory_only": ranking,
@@ -184,8 +204,8 @@ def main() -> None:
             "",
             f"Scored targets: {data['draw_count_in_scored_window']}; history starts {data['history_start_date']}; first target {data['first_target_date']}; latest draw {data['last_draw_date']}.",
             "",
-            "| Method | All mean hits | 2023–24 mean hits | 2025+ mean hits |",
-            "|---|---:|---:|---:|",
+            "| Method | All mean hits | 2023–24 hits | 2025+ hits | All position exact | All position MAE |",
+            "|---|---:|---:|---:|---:|---:|",
         ])
         ranking = sorted(
             data["results"],
@@ -194,8 +214,10 @@ def main() -> None:
         for name in ranking:
             values = data["results"][name]
             fmt = lambda key: "n/a" if values[key]["mean_hits"] is None else f"{values[key]['mean_hits']:.4f}"
+            exact = "n/a" if values["all"]["position_exact_rate"] is None else f"{values['all']['position_exact_rate']:.4f}"
+            mae = "n/a" if values["all"]["position_mae"] is None else f"{values['all']['position_mae']:.3f}"
             lines.append(
-                f"| {name} | {fmt('all')} | {fmt('2023_2024_exploratory')} | {fmt('2025_plus_exploratory')} |"
+                f"| {name} | {fmt('all')} | {fmt('2023_2024_exploratory')} | {fmt('2025_plus_exploratory')} | {exact} | {mae} |"
             )
         lines.append("")
     (outdir / f"{now.date().isoformat()}.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
