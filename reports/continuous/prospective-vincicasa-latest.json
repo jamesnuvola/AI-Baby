@@ -1,0 +1,51 @@
+{
+  "created_at_utc": "2026-10-28T18:48:54.851920+00:00",
+  "evaluation_status": "pending; score only after the target draw is published",
+  "game": "vincicasa",
+  "history": {
+    "dataset_path": "data/vincicasa_snapshot_2026-10-27.csv",
+    "draw_count": 3390,
+    "first_draw_date": "2017-07-17",
+    "latest_draw_date": "2026-10-27",
+    "latest_draw_id": "vincicasa-2026-10-27",
+    "latest_draw_numbers": [
+      1,
+      6,
+      8,
+      28,
+      34
+    ],
+    "sha256": "5ed184644fafcc2d4eee7f8b5fd97799a42ab701d74f5570be857208fd9a17cf"
+  },
+  "predictions": {
+    "chronological_position_decoder_n120_tau500": [
+      1,
+      15,
+      21,
+      25,
+      39
+    ],
+    "chronological_trajectory_decoder_w8_n80_tau500": [
+      1,
+      11,
+      13,
+      31,
+      40
+    ],
+    "global_frequency": [
+      8,
+      10,
+      13,
+      37,
+      40
+    ]
+  },
+  "record_type": "prospective_prediction_freeze",
+  "schema_version": 1,
+  "scientific_warning": "Exploratory lottery predictions only; this record does not establish a predictive edge or increase the known probability of winning.",
+  "target": {
+    "definition": "first official draw after latest_draw; target date intentionally unknown at freeze time",
+    "draw_date": null,
+    "draw_id": null
+  }
+}

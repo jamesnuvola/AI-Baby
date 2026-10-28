@@ -14,6 +14,7 @@
         "transition_power": 7
       },
       "dataset": "data/superenalotto_snapshot_2026-10-27.csv",
+      "dataset_sha256": "be5adca147c028d661f0f64298049fb24348e694ce1474e130a4d804562b74ec",
       "development_ranking_2023_2024_exploratory_only": [
         "anti_hot_window10",
         "gap_neighbours5",
@@ -57,6 +58,11 @@
         "anti_hot_window40"
       ],
       "draw_count_in_scored_window": 927,
+      "exact_rule_catalog": {
+        "dated_path": "reports/continuous/exact-rule-catalog-superenalotto-2026-10-28.json",
+        "full_position_exact_count": 0,
+        "rank_exact_match_count": 5326
+      },
       "first_target_date": "2022-01-03",
       "game": "superenalotto",
       "history_start_date": "2021-05-13",
@@ -5135,6 +5141,7 @@
         "transition_power": 7
       },
       "dataset": "data/vincicasa_snapshot_2026-10-27.csv",
+      "dataset_sha256": "5ed184644fafcc2d4eee7f8b5fd97799a42ab701d74f5570be857208fd9a17cf",
       "development_ranking_2023_2024_exploratory_only": [
         "overdue_first",
         "gap_neighbours5",
@@ -5178,6 +5185,11 @@
         "exponential_decay_tau20"
       ],
       "draw_count_in_scored_window": 1761,
+      "exact_rule_catalog": {
+        "dated_path": "reports/continuous/exact-rule-catalog-vincicasa-2026-10-28.json",
+        "full_position_exact_count": 0,
+        "rank_exact_match_count": 19903
+      },
       "first_target_date": "2022-01-01",
       "game": "vincicasa",
       "history_start_date": "2021-09-23",
@@ -9644,7 +9656,7 @@
       "warning": "2023-2024 and 2025+ were previously explored; neither is an untouched blind holdout. Repeated parameter sweeps inflate apparent best scores."
     }
   },
-  "generated_at_utc": "2026-10-28T17:40:54.379404+00:00",
+  "generated_at_utc": "2026-10-28T18:48:54.851920+00:00",
   "next_required_step": "Refresh official source data and score frozen prospective predictions before claiming any edge.",
   "run_date_utc": "2026-10-28",
   "status": "exploratory; no model promotion"
