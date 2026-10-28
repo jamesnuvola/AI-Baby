@@ -97,6 +97,15 @@ class LotteryDataTests(unittest.TestCase):
         self.assertEqual(draws[-1].numbers, (1, 6, 8, 28, 34))
         self.assertTrue(all(len(d.numbers) == 5 and len(set(d.numbers)) == 5 for d in draws))
 
+    def test_updated_superenalotto_snapshot_matches_official_latest_draw(self):
+        root = Path(__file__).resolve().parents[1]
+        draws = load_draws_csv(root / "data" / "superenalotto_snapshot_2026-10-27.csv", game="superenalotto")
+        self.assertEqual(len(draws), 2943)
+        self.assertEqual(draws[0].draw_date, date(2009, 1, 2))
+        self.assertEqual(draws[-1].draw_date, date(2026, 10, 27))
+        self.assertEqual(draws[-1].numbers, (23, 34, 44, 48, 64, 70))
+        self.assertTrue(all(len(d.numbers) == 6 and len(set(d.numbers)) == 6 for d in draws))
+
 
 if __name__ == "__main__":
     unittest.main()
