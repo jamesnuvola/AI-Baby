@@ -1,6 +1,11 @@
 name: Daily Lottery Research
 
 on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/daily-lottery-research.yml"
+      - "scripts/daily_lottery_sweep.py"
   schedule:
     - cron: "17 4 * * *"
   workflow_dispatch:
