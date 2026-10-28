@@ -1,0 +1,61 @@
+{
+  "frozen_at": "2026-10-28T11:06:13+01:00",
+  "code_revision": "0c91fdb47db70c4c428cb1cc69a46b62fa2317ae",
+  "data_cutoff": "2026-10-27",
+  "evaluation_policy": "Score every registered method after the target draw. Do not select or retune methods after seeing the outcome.",
+  "status": "FROZEN_BEFORE_TARGET; shadow evaluation only; no method promoted",
+  "predictions": {
+    "superenalotto": {
+      "game": "superenalotto",
+      "experiment": "EXP-008 prospective prediction freeze",
+      "code_revision": "0c91fdb47db70c4c428cb1cc69a46b62fa2317ae",
+      "target_date": "2026-10-29",
+      "frozen_at": "2026-10-28T11:06:13+01:00",
+      "data_cutoff": "2026-10-27",
+      "last_draw_id": "superenalotto-2026-172",
+      "last_draw_numbers": [23, 34, 44, 48, 64, 70],
+      "history_count": 2943,
+      "number_count": 6,
+      "number_pool": 90,
+      "uniform_expected_hits": 0.4,
+      "predictions": {
+        "global_frequency": [6, 45, 49, 52, 79, 85],
+        "recent_frequency_20": [18, 25, 26, 28, 41, 55],
+        "anti_hot_20": [2, 6, 7, 8, 9, 15],
+        "exponential_decay_tau10": [18, 34, 41, 44, 55, 77],
+        "overdue_first": [9, 19, 58, 87, 88, 90],
+        "transition_analogue_overlap2_power3": [24, 25, 69, 72, 78, 86],
+        "gap_trajectory_nearest20": [1, 6, 21, 32, 63, 70],
+        "random_uniform_seed0": [6, 34, 50, 54, 63, 66]
+      },
+      "source_manifest": "data/superenalotto_snapshot_2026-10-27.manifest.json",
+      "status": "FROZEN_BEFORE_TARGET; shadow evaluation only; no method promoted"
+    },
+    "vincicasa": {
+      "game": "vincicasa",
+      "experiment": "EXP-008 prospective prediction freeze",
+      "code_revision": "0c91fdb47db70c4c428cb1cc69a46b62fa2317ae",
+      "target_date": "2026-10-28",
+      "frozen_at": "2026-10-28T11:06:13+01:00",
+      "data_cutoff": "2026-10-27",
+      "last_draw_id": "vincicasa-2026-10-27",
+      "last_draw_numbers": [1, 6, 8, 28, 34],
+      "history_count": 3390,
+      "number_count": 5,
+      "number_pool": 40,
+      "uniform_expected_hits": 0.625,
+      "predictions": {
+        "global_frequency": [8, 10, 13, 37, 40],
+        "recent_frequency_20": [1, 9, 12, 26, 35],
+        "anti_hot_20": [3, 10, 27, 38, 40],
+        "exponential_decay_tau10": [1, 25, 26, 35, 36],
+        "overdue_first": [3, 10, 27, 38, 40],
+        "transition_analogue_overlap2_power3": [3, 11, 31, 35, 40],
+        "gap_trajectory_nearest20": [14, 19, 27, 35, 37],
+        "random_uniform_seed0": [3, 17, 25, 27, 33]
+      },
+      "source_manifest": "data/vincicasa_snapshot_2026-10-27.manifest.json",
+      "status": "FROZEN_BEFORE_TARGET; shadow evaluation only; no method promoted"
+    }
+  }
+}

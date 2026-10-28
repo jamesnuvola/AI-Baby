@@ -30,3 +30,24 @@ jobs:
         run: python -m scripts.continuous_improvement --budgets 20000 --seeds 0,1,2 --output-dir /tmp/ai_baby_benchmarks
       - name: Run demo smoke test
         run: python -m ai_baby.cli demo --db /tmp/ai_baby_ci.sqlite --budget 20000
+
+  lottery-smoke:
+    name: Lottery benchmark smoke tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Run SuperEnalotto benchmark smoke test
+        run: python -m scripts.lottery_benchmark data/superenalotto_snapshot_2026-10-27.csv --game superenalotto --minimum-history 100 --simulations 10 --output /tmp/superenalotto-exp008.json
+      - name: Run VinciCasa benchmark smoke test
+        run: python -m scripts.lottery_benchmark data/vincicasa_snapshot_2026-10-27.csv --game vincicasa --minimum-history 100 --simulations 10 --output /tmp/vincicasa-exp008.json
+      - name: Generate and verify frozen pre-draw predictions
+        run: |
+          python -m scripts.freeze_lottery_predictions --superenalotto data/superenalotto_snapshot_2026-10-27.csv --vincicasa data/vincicasa_snapshot_2026-10-27.csv --frozen-at 2026-10-28T11:06:13+01:00 --superenalotto-target 2026-10-29 --vincicasa-target 2026-10-28 --code-revision 0c91fdb47db70c4c428cb1cc69a46b62fa2317ae --output /tmp/prediction-freeze.json
+          python -c "import json; a=json.load(open('/tmp/prediction-freeze.json')); b=json.load(open('reports/prediction-freeze-2026-10-28.json')); assert a['predictions']==b['predictions'], 'generated predictions differ from frozen record'; print('Frozen predictions verified against committed record.')"
