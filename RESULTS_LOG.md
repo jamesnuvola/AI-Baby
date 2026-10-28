@@ -128,7 +128,7 @@ Questo registro conserva risultati positivi e negativi. Aggiungere nuove prove i
 
 ## EXP-009 — Analogie di transizione e geometria dei gap
 
-- **Stato:** metodi implementati; unit test superati da GitHub Actions al commit `ef64ce0100fcb1b7ae6a5f09e6cb6dee7d24c311`. La CI aggiornata con verifica del freeze prospettico è in corso nella PR #4.
+- **Stato:** metodi implementati; unit test superati da GitHub Actions al commit `ef64ce0100fcb1b7ae6a5f09e6cb6dee7d24c311`; la CI completa con benchmark e verifica del freeze è stata superata sul branch head `b81f8ac8c34949668d1ed031195ef00ed5a363c3`. PR #4 unita a `main` con commit `96495b1ed81f00519bcc8a7dd2a5405007e87d15`.
 - **Metodi:** `transition_analogue` vota i numeri delle estrazioni-successore di stati storici con overlap almeno 2, peso overlap^3; `gap_trajectory_neighbours` trova i 20 stati con geometria dei gap più vicina (distanza L1) e vota i loro successori con peso 1/(1+distance).
 - **SuperEnalotto (baseline 0,4000):** transition analogue — 0,4034 su tutto il periodo, 0,3974 nel 2023–2024, 0,3868 nel 2025+; gap nearest20 — 0,3887, 0,4385, 0,3737. Nessun vantaggio stabile.
 - **VinciCasa (baseline 0,6250):** transition analogue — 0,6249, 0,6553, 0,6361; gap nearest20 — 0,6261, 0,6279, 0,6797 rispettivamente su tutto, 2023–2024 e 2025+.
@@ -137,7 +137,7 @@ Questo registro conserva risultati positivi e negativi. Aggiungere nuove prove i
 
 ## EXP-010 — Freeze prospettico pre-estrazione
 
-- **Stato:** record congelato alle 2026-10-28 11:06:13 Europe/Rome; verifica automatica del freeze aggiunta al workflow CI.
+- **Stato:** record congelato alle 2026-10-28 11:06:13 Europe/Rome; generazione e confronto automatico con il record committato verificati nella CI del branch head `b81f8ac8c34949668d1ed031195ef00ed5a363c3`; PR #4 unita a `main` con commit `96495b1ed81f00519bcc8a7dd2a5405007e87d15`.
 - **Target:** VinciCasa 2026-10-28 e SuperEnalotto 2026-10-29; cutoff dati 2026-10-27.
 - **Record immutabile:** `reports/PREDICTION_FREEZE_2026-10-28.md` e `reports/prediction-freeze-2026-10-28.json`.
 - **Metodi congelati:** frequenza globale, frequenza ultime 20, anti-hot, decadimento esponenziale, ritardatari-first, transition analogue, gap-trajectory nearest20 e controllo uniforme seed 0.
