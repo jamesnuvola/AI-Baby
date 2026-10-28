@@ -1,6 +1,6 @@
 # Daily variable sweep — 2026-10-28
 
-Generated: 2026-10-28T12:16:41.387935+00:00
+Generated: 2026-10-28T12:18:47.628422+00:00
 
 **Status:** exploratory. No method is promoted automatically.
 
@@ -15,13 +15,16 @@ Scored targets: 927; history starts 2021-05-13; first target 2022-01-03; latest 
 | anti_hot_window10 | 0.4164 | 0.4385 | 0.4263 |
 | gap_neighbours5 | 0.4347 | 0.4385 | 0.4447 |
 | gap_neighbours10 | 0.4153 | 0.4333 | 0.4211 |
+| daily_transition_overlap2_power7 | 0.3894 | 0.4282 | 0.3684 |
 | transition_overlap2_power3 | 0.3883 | 0.4205 | 0.3789 |
+| daily_anti_hot_window120 | 0.4078 | 0.4179 | 0.3789 |
 | global_frequency | 0.3948 | 0.4154 | 0.3816 |
 | exponential_decay_tau20 | 0.3981 | 0.4128 | 0.3658 |
 | exponential_decay_tau5 | 0.3959 | 0.4051 | 0.3816 |
 | transition_overlap1_power3 | 0.3786 | 0.4051 | 0.3500 |
 | transition_overlap2_power1 | 0.3873 | 0.4051 | 0.3605 |
 | gap_neighbours40 | 0.4013 | 0.4026 | 0.3921 |
+| daily_gap_neighbours118 | 0.3959 | 0.4026 | 0.3737 |
 | random_uniform_seed0 | 0.4337 | 0.4000 | 0.4447 |
 | transition_overlap2_power2 | 0.3808 | 0.4000 | 0.3684 |
 | transition_overlap1_power1 | 0.3722 | 0.3949 | 0.3211 |
@@ -31,9 +34,11 @@ Scored targets: 927; history starts 2021-05-13; first target 2022-01-03; latest 
 | transition_overlap3_power1 | 0.3873 | 0.3923 | 0.3789 |
 | transition_overlap3_power2 | 0.3883 | 0.3923 | 0.3816 |
 | transition_overlap3_power3 | 0.3883 | 0.3923 | 0.3816 |
+| daily_exponential_decay_tau118 | 0.3765 | 0.3897 | 0.3553 |
 | recent_frequency_window80 | 0.3894 | 0.3872 | 0.3711 |
 | exponential_decay_tau10 | 0.3981 | 0.3872 | 0.3737 |
 | gap_neighbours20 | 0.4067 | 0.3872 | 0.3947 |
+| daily_recent_window218 | 0.3657 | 0.3872 | 0.3447 |
 | recent_frequency_window20 | 0.3937 | 0.3667 | 0.4158 |
 | overdue_first | 0.3851 | 0.3615 | 0.3947 |
 | anti_hot_window20 | 0.3830 | 0.3590 | 0.4184 |
@@ -50,15 +55,19 @@ Scored targets: 1761; history starts 2021-09-23; first target 2022-01-01; latest
 | gap_neighbours5 | 0.6616 | 0.6607 | 0.6827 |
 | transition_overlap2_power3 | 0.6553 | 0.6594 | 0.6406 |
 | random_uniform_seed0 | 0.6337 | 0.6539 | 0.6331 |
+| daily_transition_overlap2_power7 | 0.6502 | 0.6525 | 0.6481 |
 | transition_overlap2_power2 | 0.6468 | 0.6512 | 0.6331 |
 | transition_overlap1_power3 | 0.6468 | 0.6443 | 0.6466 |
 | transition_overlap3_power1 | 0.6354 | 0.6402 | 0.6331 |
 | transition_overlap3_power2 | 0.6354 | 0.6389 | 0.6346 |
+| daily_anti_hot_window120 | 0.6383 | 0.6389 | 0.6421 |
 | transition_overlap3_power3 | 0.6388 | 0.6375 | 0.6466 |
+| daily_recent_window218 | 0.6422 | 0.6375 | 0.6647 |
 | transition_overlap2_power1 | 0.6332 | 0.6361 | 0.6195 |
 | anti_hot_window20 | 0.6207 | 0.6347 | 0.6105 |
 | gap_neighbours40 | 0.6377 | 0.6306 | 0.6617 |
 | anti_hot_window40 | 0.6258 | 0.6252 | 0.6105 |
+| daily_exponential_decay_tau118 | 0.6371 | 0.6238 | 0.6692 |
 | transition_overlap1_power2 | 0.6383 | 0.6224 | 0.6406 |
 | anti_hot_window10 | 0.6195 | 0.6183 | 0.6301 |
 | gap_neighbours10 | 0.6474 | 0.6129 | 0.6812 |
@@ -70,6 +79,7 @@ Scored targets: 1761; history starts 2021-09-23; first target 2022-01-01; latest
 | exponential_decay_tau10 | 0.6133 | 0.5896 | 0.6361 |
 | recent_frequency_window40 | 0.6070 | 0.5841 | 0.6391 |
 | exponential_decay_tau40 | 0.6167 | 0.5800 | 0.6481 |
+| daily_gap_neighbours118 | 0.6195 | 0.5800 | 0.6586 |
 | exponential_decay_tau5 | 0.5928 | 0.5691 | 0.6015 |
 | global_frequency | 0.6144 | 0.5677 | 0.6632 |
 | exponential_decay_tau20 | 0.6031 | 0.5636 | 0.6481 |

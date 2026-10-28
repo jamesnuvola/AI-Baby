@@ -2,17 +2,28 @@
   "experiment": "Daily variable sweep",
   "games": {
     "superenalotto": {
+      "daily_rotating_parameters": {
+        "anti_hot_window": 120,
+        "decay_tau": 118.0,
+        "gap_neighbours": 118,
+        "recent_window": 218,
+        "transition_overlap": 2,
+        "transition_power": 7
+      },
       "dataset": "data/superenalotto_snapshot_2026-10-27.csv",
       "development_ranking_2023_2024_exploratory_only": [
         "anti_hot_window10",
         "gap_neighbours5",
         "gap_neighbours10",
+        "daily_transition_overlap2_power7",
         "transition_overlap2_power3",
+        "daily_anti_hot_window120",
         "global_frequency",
         "exponential_decay_tau20",
         "exponential_decay_tau5",
         "transition_overlap1_power3",
         "transition_overlap2_power1",
+        "daily_gap_neighbours118",
         "gap_neighbours40",
         "random_uniform_seed0",
         "transition_overlap2_power2",
@@ -23,6 +34,8 @@
         "transition_overlap3_power1",
         "transition_overlap3_power2",
         "transition_overlap3_power3",
+        "daily_exponential_decay_tau118",
+        "daily_recent_window218",
         "exponential_decay_tau10",
         "gap_neighbours20",
         "recent_frequency_window80",
@@ -37,7 +50,7 @@
       "game": "superenalotto",
       "history_start_date": "2021-05-13",
       "last_draw_date": "2026-10-27",
-      "method_count": 27,
+      "method_count": 32,
       "minimum_history": 100,
       "parameter_grid": {
         "anti_hot_windows": [
@@ -141,6 +154,121 @@
             "n": 927,
             "p_ge2": 0.03452,
             "p_ge3": 0.001079,
+            "uniform_expected_mean_hits": 0.4
+          }
+        },
+        "daily_anti_hot_window120": {
+          "2023_2024_exploratory": {
+            "mean_hits": 0.417949,
+            "n": 390,
+            "p_ge2": 0.053846,
+            "p_ge3": 0.0,
+            "uniform_expected_mean_hits": 0.4
+          },
+          "2025_plus_exploratory": {
+            "mean_hits": 0.378947,
+            "n": 380,
+            "p_ge2": 0.039474,
+            "p_ge3": 0.0,
+            "uniform_expected_mean_hits": 0.4
+          },
+          "all": {
+            "mean_hits": 0.407767,
+            "n": 927,
+            "p_ge2": 0.048544,
+            "p_ge3": 0.001079,
+            "uniform_expected_mean_hits": 0.4
+          }
+        },
+        "daily_exponential_decay_tau118": {
+          "2023_2024_exploratory": {
+            "mean_hits": 0.389744,
+            "n": 390,
+            "p_ge2": 0.048718,
+            "p_ge3": 0.0,
+            "uniform_expected_mean_hits": 0.4
+          },
+          "2025_plus_exploratory": {
+            "mean_hits": 0.355263,
+            "n": 380,
+            "p_ge2": 0.044737,
+            "p_ge3": 0.0,
+            "uniform_expected_mean_hits": 0.4
+          },
+          "all": {
+            "mean_hits": 0.376483,
+            "n": 927,
+            "p_ge2": 0.05178,
+            "p_ge3": 0.0,
+            "uniform_expected_mean_hits": 0.4
+          }
+        },
+        "daily_gap_neighbours118": {
+          "2023_2024_exploratory": {
+            "mean_hits": 0.402564,
+            "n": 390,
+            "p_ge2": 0.046154,
+            "p_ge3": 0.0,
+            "uniform_expected_mean_hits": 0.4
+          },
+          "2025_plus_exploratory": {
+            "mean_hits": 0.373684,
+            "n": 380,
+            "p_ge2": 0.036842,
+            "p_ge3": 0.005263,
+            "uniform_expected_mean_hits": 0.4
+          },
+          "all": {
+            "mean_hits": 0.395901,
+            "n": 927,
+            "p_ge2": 0.045307,
+            "p_ge3": 0.003236,
+            "uniform_expected_mean_hits": 0.4
+          }
+        },
+        "daily_recent_window218": {
+          "2023_2024_exploratory": {
+            "mean_hits": 0.387179,
+            "n": 390,
+            "p_ge2": 0.028205,
+            "p_ge3": 0.002564,
+            "uniform_expected_mean_hits": 0.4
+          },
+          "2025_plus_exploratory": {
+            "mean_hits": 0.344737,
+            "n": 380,
+            "p_ge2": 0.042105,
+            "p_ge3": 0.002632,
+            "uniform_expected_mean_hits": 0.4
+          },
+          "all": {
+            "mean_hits": 0.365696,
+            "n": 927,
+            "p_ge2": 0.036677,
+            "p_ge3": 0.002157,
+            "uniform_expected_mean_hits": 0.4
+          }
+        },
+        "daily_transition_overlap2_power7": {
+          "2023_2024_exploratory": {
+            "mean_hits": 0.428205,
+            "n": 390,
+            "p_ge2": 0.061538,
+            "p_ge3": 0.0,
+            "uniform_expected_mean_hits": 0.4
+          },
+          "2025_plus_exploratory": {
+            "mean_hits": 0.368421,
+            "n": 380,
+            "p_ge2": 0.052632,
+            "p_ge3": 0.0,
+            "uniform_expected_mean_hits": 0.4
+          },
+          "all": {
+            "mean_hits": 0.389428,
+            "n": 927,
+            "p_ge2": 0.050701,
+            "p_ge3": 0.0,
             "uniform_expected_mean_hits": 0.4
           }
         },
@@ -698,24 +826,37 @@
         }
       },
       "selection_policy": "No automatic promotion. Ranking is exploratory only; all methods remain in the report.",
+      "sweep_date_utc": "2026-10-28",
       "warning": "2023-2024 and 2025+ were previously explored; neither is an untouched blind holdout. Repeated parameter sweeps inflate apparent best scores."
     },
     "vincicasa": {
+      "daily_rotating_parameters": {
+        "anti_hot_window": 120,
+        "decay_tau": 118.0,
+        "gap_neighbours": 118,
+        "recent_window": 218,
+        "transition_overlap": 2,
+        "transition_power": 7
+      },
       "dataset": "data/vincicasa_snapshot_2026-10-27.csv",
       "development_ranking_2023_2024_exploratory_only": [
         "overdue_first",
         "gap_neighbours5",
         "transition_overlap2_power3",
         "random_uniform_seed0",
+        "daily_transition_overlap2_power7",
         "transition_overlap2_power2",
         "transition_overlap1_power3",
         "transition_overlap3_power1",
+        "daily_anti_hot_window120",
         "transition_overlap3_power2",
+        "daily_recent_window218",
         "transition_overlap3_power3",
         "transition_overlap2_power1",
         "anti_hot_window20",
         "gap_neighbours40",
         "anti_hot_window40",
+        "daily_exponential_decay_tau118",
         "transition_overlap1_power2",
         "anti_hot_window10",
         "gap_neighbours10",
@@ -726,6 +867,7 @@
         "exponential_decay_tau10",
         "recent_frequency_window20",
         "recent_frequency_window40",
+        "daily_gap_neighbours118",
         "exponential_decay_tau40",
         "exponential_decay_tau5",
         "global_frequency",
@@ -736,7 +878,7 @@
       "game": "vincicasa",
       "history_start_date": "2021-09-23",
       "last_draw_date": "2026-10-27",
-      "method_count": 27,
+      "method_count": 32,
       "minimum_history": 100,
       "parameter_grid": {
         "anti_hot_windows": [
@@ -840,6 +982,121 @@
             "n": 1761,
             "p_ge2": 0.108461,
             "p_ge3": 0.011357,
+            "uniform_expected_mean_hits": 0.625
+          }
+        },
+        "daily_anti_hot_window120": {
+          "2023_2024_exploratory": {
+            "mean_hits": 0.638851,
+            "n": 731,
+            "p_ge2": 0.128591,
+            "p_ge3": 0.010944,
+            "uniform_expected_mean_hits": 0.625
+          },
+          "2025_plus_exploratory": {
+            "mean_hits": 0.642105,
+            "n": 665,
+            "p_ge2": 0.121805,
+            "p_ge3": 0.009023,
+            "uniform_expected_mean_hits": 0.625
+          },
+          "all": {
+            "mean_hits": 0.638274,
+            "n": 1761,
+            "p_ge2": 0.120954,
+            "p_ge3": 0.011357,
+            "uniform_expected_mean_hits": 0.625
+          }
+        },
+        "daily_exponential_decay_tau118": {
+          "2023_2024_exploratory": {
+            "mean_hits": 0.623803,
+            "n": 731,
+            "p_ge2": 0.116279,
+            "p_ge3": 0.008208,
+            "uniform_expected_mean_hits": 0.625
+          },
+          "2025_plus_exploratory": {
+            "mean_hits": 0.669173,
+            "n": 665,
+            "p_ge2": 0.120301,
+            "p_ge3": 0.019549,
+            "uniform_expected_mean_hits": 0.625
+          },
+          "all": {
+            "mean_hits": 0.637138,
+            "n": 1761,
+            "p_ge2": 0.114708,
+            "p_ge3": 0.013061,
+            "uniform_expected_mean_hits": 0.625
+          }
+        },
+        "daily_gap_neighbours118": {
+          "2023_2024_exploratory": {
+            "mean_hits": 0.580027,
+            "n": 731,
+            "p_ge2": 0.083447,
+            "p_ge3": 0.001368,
+            "uniform_expected_mean_hits": 0.625
+          },
+          "2025_plus_exploratory": {
+            "mean_hits": 0.658647,
+            "n": 665,
+            "p_ge2": 0.124812,
+            "p_ge3": 0.006015,
+            "uniform_expected_mean_hits": 0.625
+          },
+          "all": {
+            "mean_hits": 0.619534,
+            "n": 1761,
+            "p_ge2": 0.10335,
+            "p_ge3": 0.005111,
+            "uniform_expected_mean_hits": 0.625
+          }
+        },
+        "daily_recent_window218": {
+          "2023_2024_exploratory": {
+            "mean_hits": 0.637483,
+            "n": 731,
+            "p_ge2": 0.123119,
+            "p_ge3": 0.008208,
+            "uniform_expected_mean_hits": 0.625
+          },
+          "2025_plus_exploratory": {
+            "mean_hits": 0.664662,
+            "n": 665,
+            "p_ge2": 0.121805,
+            "p_ge3": 0.019549,
+            "uniform_expected_mean_hits": 0.625
+          },
+          "all": {
+            "mean_hits": 0.642249,
+            "n": 1761,
+            "p_ge2": 0.118683,
+            "p_ge3": 0.013629,
+            "uniform_expected_mean_hits": 0.625
+          }
+        },
+        "daily_transition_overlap2_power7": {
+          "2023_2024_exploratory": {
+            "mean_hits": 0.652531,
+            "n": 731,
+            "p_ge2": 0.125855,
+            "p_ge3": 0.010944,
+            "uniform_expected_mean_hits": 0.625
+          },
+          "2025_plus_exploratory": {
+            "mean_hits": 0.64812,
+            "n": 665,
+            "p_ge2": 0.099248,
+            "p_ge3": 0.01203,
+            "uniform_expected_mean_hits": 0.625
+          },
+          "all": {
+            "mean_hits": 0.650199,
+            "n": 1761,
+            "p_ge2": 0.113572,
+            "p_ge3": 0.011925,
             "uniform_expected_mean_hits": 0.625
           }
         },
@@ -1397,10 +1654,11 @@
         }
       },
       "selection_policy": "No automatic promotion. Ranking is exploratory only; all methods remain in the report.",
+      "sweep_date_utc": "2026-10-28",
       "warning": "2023-2024 and 2025+ were previously explored; neither is an untouched blind holdout. Repeated parameter sweeps inflate apparent best scores."
     }
   },
-  "generated_at_utc": "2026-10-28T12:16:41.387935+00:00",
+  "generated_at_utc": "2026-10-28T12:18:47.628422+00:00",
   "next_required_step": "Refresh official source data and score frozen prospective predictions before claiming any edge.",
   "run_date_utc": "2026-10-28",
   "status": "exploratory; no model promotion"
