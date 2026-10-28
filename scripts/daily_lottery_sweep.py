@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from datetime import date, datetime, timezone
 from pathlib import Path
 
@@ -185,6 +186,70 @@ def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 1
     }
 
 
+def write_prospective_freezes(now: datetime, outdir: Path) -> None:
+    """Persist dated predictions before future draws, with input hashes and model configs."""
+    from ai_baby.lottery_methods import global_frequency
+
+    stamp = now.strftime("%Y%m%dT%H%M%SZ")
+    datasets = {
+        "superenalotto": Path("data/superenalotto_snapshot_2026-10-27.csv"),
+        "vincicasa": Path("data/vincicasa_snapshot_2026-10-27.csv"),
+    }
+    methods = {
+        "chronological_trajectory_decoder_w8_n80_tau500": chronological_trajectory_decoder(
+            window=8, neighbours=80, recency_tau=500.0
+        ),
+        "chronological_position_decoder_n120_tau500": chronological_position_decoder(
+            neighbours=120, recency_tau=500.0
+        ),
+        "global_frequency": global_frequency,
+    }
+    for game, dataset in datasets.items():
+        draws = load_draws_csv(dataset, game=game)
+        if len(draws) < 100:
+            raise ValueError(f"refusing to freeze {game}: only {len(draws)} historical draws")
+        digest = hashlib.sha256(dataset.read_bytes()).hexdigest()
+        predictions = {}
+        for name, predictor in methods.items():
+            values = tuple(int(n) for n in predictor(tuple(draws)))
+            if len(values) != len(set(values)) or tuple(sorted(values)) != values:
+                raise ValueError(f"{name} returned invalid prediction for {game}: {values}")
+            predictions[name] = list(values)
+        latest = draws[-1]
+        record = {
+            "schema_version": 1,
+            "record_type": "prospective_prediction_freeze",
+            "created_at_utc": now.isoformat(),
+            "game": game,
+            "target": {
+                "draw_id": None,
+                "draw_date": None,
+                "definition": "first official draw after latest_draw; target date intentionally unknown at freeze time",
+            },
+            "history": {
+                "dataset_path": dataset.as_posix(),
+                "sha256": digest,
+                "draw_count": len(draws),
+                "first_draw_date": draws[0].draw_date.isoformat(),
+                "latest_draw_id": latest.draw_id,
+                "latest_draw_date": latest.draw_date.isoformat(),
+                "latest_draw_numbers": list(latest.numbers),
+            },
+            "predictions": predictions,
+            "evaluation_status": "pending; score only after the target draw is published",
+            "scientific_warning": (
+                "Exploratory lottery predictions only; this record does not establish a predictive edge "
+                "or increase the known probability of winning."
+            ),
+        }
+        dated = outdir / f"prospective-{game}-{stamp}.json"
+        dated.write_text(json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        (outdir / f"prospective-{game}-latest.json").write_text(
+            json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        print(f"Frozen {game} prospective predictions: {predictions} ({dated})")
+
+
 def main() -> None:
     now = datetime.now(timezone.utc)
     report = {
@@ -244,6 +309,7 @@ def main() -> None:
         lines.append("")
     (outdir / f"{now.date().isoformat()}.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     (outdir / "latest.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    write_prospective_freezes(now, outdir)
     print(f"Generated daily parameter sweep for {len(report['games'])} games.")
     print(f"Methods per game: {len(parameter_grid())}; output: {outdir}")
 
