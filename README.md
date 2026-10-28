@@ -67,6 +67,10 @@ Il freeze prospettico conserva le previsioni di tutti i metodi prima delle estra
 
 **Importante:** le finestre storiche 2023–2024 e 2025+ sono già state esplorate in precedenti ricerche SONAR e non sono un test cieco nuovo. I risultati sono esplorativi, instabili e non provano un vantaggio; nessun metodo viene promosso in base a un singolo periodo o a una coincidenza.
 
+- Automazione giornaliera: workflow [Daily Lottery Research](.github/workflows/daily-lottery-research.yml), eseguito ogni giorno alle 04:17 UTC e attivabile manualmente da GitHub Actions.
+- Sweep di variabili: [scripts/daily_lottery_sweep.py](scripts/daily_lottery_sweep.py), con report datati in [reports/continuous/](reports/continuous/) e artefatti GitHub Actions conservati per 90 giorni.
+- La classifica automatica è solo esplorativa: non modifica né promuove automaticamente il metodo predefinito. I dataset sono ancora snapshot fissi; l'aggiornamento automatico dai bollettini ufficiali è un passaggio separato da implementare e verificare.
+
 ## Limiti tecnici
 
 - Spazio di ricerca circoscritto al DSL nel codice; il candidato newton3 applica l'estrapolazione alle differenze finite fino al terzo ordine e va valutato contro le altre famiglie, non assunto come sempre corretto.
