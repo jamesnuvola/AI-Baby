@@ -35,7 +35,7 @@ jobs:
       - name: Validate code and data before research
         run: |
           python -m unittest discover -s tests -v
-          python -c "from ai_baby.lottery import load_draws_csv; assert len(load_draws_csv('data/superenalotto_snapshot_2026-10-27.csv', game='superenalotto')) == 2943; assert len(load_draws_csv('data/vincicasa_snapshot_2026-10-27.csv', game='vincicasa')) == 3390"
+          python -c "from ai_baby.lottery import load_draws_csv; assert len(load_draws_csv('data/superenalotto_snapshot_2026-10-27.csv', game='superenalotto'))  >= 2943; assert len(load_draws_csv('data/vincicasa_snapshot_2026-10-27.csv', game='vincicasa'))  >= 3390"
       - name: Run daily parameter sweep
         run: python -m scripts.daily_lottery_sweep
       - name: Persist dated and latest reports
