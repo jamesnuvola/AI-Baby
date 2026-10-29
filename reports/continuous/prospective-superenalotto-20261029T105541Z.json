@@ -1,0 +1,55 @@
+{
+  "created_at_utc": "2026-10-29T10:55:41.568629+00:00",
+  "evaluation_status": "pending; score only after the target draw is published",
+  "game": "superenalotto",
+  "history": {
+    "dataset_path": "data/superenalotto_snapshot_2026-10-27.csv",
+    "draw_count": 2943,
+    "first_draw_date": "2009-01-02",
+    "latest_draw_date": "2026-10-27",
+    "latest_draw_id": "superenalotto-2026-172",
+    "latest_draw_numbers": [
+      23,
+      34,
+      44,
+      48,
+      64,
+      70
+    ],
+    "sha256": "be5adca147c028d661f0f64298049fb24348e694ce1474e130a4d804562b74ec"
+  },
+  "predictions": {
+    "chronological_position_decoder_n120_tau500": [
+      10,
+      21,
+      31,
+      35,
+      71,
+      85
+    ],
+    "chronological_trajectory_decoder_w8_n80_tau500": [
+      1,
+      17,
+      45,
+      50,
+      68,
+      82
+    ],
+    "global_frequency": [
+      6,
+      45,
+      49,
+      52,
+      79,
+      85
+    ]
+  },
+  "record_type": "prospective_prediction_freeze",
+  "schema_version": 1,
+  "scientific_warning": "Exploratory lottery predictions only; this record does not establish a predictive edge or increase the known probability of winning.",
+  "target": {
+    "definition": "first official draw after latest_draw; target date intentionally unknown at freeze time",
+    "draw_date": null,
+    "draw_id": null
+  }
+}
