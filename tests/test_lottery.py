@@ -142,6 +142,16 @@ class LotteryDataTests(unittest.TestCase):
                     "hits": 1,
                 },
             ],
+            "recent_rank_only": [
+                {
+                    "target_draw_id": "d3",
+                    "target_date": "2026-02-01",
+                    "history_size": 150,
+                    "prediction": [7, 2, 9, 10, 11],
+                    "actual": [7, 8, 9, 10, 12],
+                    "hits": 1,
+                },
+            ],
         }
         catalog = build_exact_rule_catalog(
             "vincicasa", records, "2026-10-28", "fixture.csv", "a" * 64
@@ -158,6 +168,12 @@ class LotteryDataTests(unittest.TestCase):
         self.assertTrue(all(item["full_ticket_also_exact"] for item in catalog["rank_exact_matches"] if item["method"] == "poor_average_but_exact_once" and item["target_draw_id"] == "d1"))
         self.assertEqual(catalog["dataset_sha256"], "a" * 64)
         self.assertEqual(catalog["rank_summary"][0]["exact_match_count"], 2)
+        self.assertEqual(catalog["priority_recent_period"]["start_date_inclusive"], "2025-10-28")
+        recent = catalog["priority_recent_period"]
+        self.assertEqual(len(recent["full_position_exact_matches"]), 0)
+        self.assertEqual(len(recent["rank_exact_matches"]), 3)
+        self.assertTrue(all(item["method"] == "recent_rank_only" for item in recent["rank_exact_matches"]))
+        self.assertEqual(recent["rank_summary"][0]["exact_match_count"], 1)
 
     def test_prospective_freeze_records_predictions_and_dataset_hashes(self):
         root = Path(__file__).resolve().parents[1]
