@@ -115,7 +115,7 @@ def build_exact_rule_catalog(
     dataset_path: str,
     dataset_sha256: str,
 ) -> dict:
-    """Archive every historical exact full-ticket and rank-level rule hit."""
+    """Archive exact hits and transform them into draw/rank-level evidence."""
     full_exact = []
     rank_exact = []
     for method_name, records in sorted(records_by_method.items()):
@@ -130,33 +130,73 @@ def build_exact_rule_catalog(
                 "prediction": prediction,
                 "actual": actual,
             }
-            if prediction == actual:
+            ticket_exact = prediction == actual
+            if ticket_exact:
                 full_exact.append({**common, "match_type": "all_sorted_positions_exact"})
             for rank, (predicted_number, actual_number) in enumerate(zip(prediction, actual), start=1):
                 if predicted_number == actual_number:
                     rank_exact.append({
-                        "method": method_name,
-                        "target_draw_id": record["target_draw_id"],
-                        "target_date": record["target_date"],
-                        "history_size": int(record["history_size"]),
+                        **common,
                         "rank": rank,
                         "predicted_number": predicted_number,
                         "actual_number": actual_number,
-                        "full_ticket_also_exact": prediction == actual,
+                        "full_ticket_also_exact": ticket_exact,
                     })
     full_exact.sort(key=lambda item: (item["target_date"], item["method"], item["target_draw_id"]))
     rank_exact.sort(key=lambda item: (item["target_date"], item["rank"], item["method"], item["target_draw_id"]))
-    # Prioritize the trailing 12 months in the catalog while retaining the full
-    # historical evidence. The cutoff is explicit and reproducible per run.
+
+    def group_rank_matches(matches: list[dict]) -> list[dict]:
+        # One row per real draw/rank/actual value, retaining every method that hit it.
+        grouped: dict[tuple, dict] = {}
+        for item in matches:
+            key = (item["target_draw_id"], item["target_date"], item["rank"], item["actual_number"])
+            if key not in grouped:
+                grouped[key] = {
+                    "target_draw_id": item["target_draw_id"],
+                    "target_date": item["target_date"],
+                    "rank": item["rank"],
+                    "actual_number": item["actual_number"],
+                    "method_count": 0,
+                    "methods": [],
+                    "history_size_min": item["history_size"],
+                    "history_size_max": item["history_size"],
+                }
+            group = grouped[key]
+            group["methods"].append(item["method"])
+            group["history_size_min"] = min(group["history_size_min"], item["history_size"])
+            group["history_size_max"] = max(group["history_size_max"], item["history_size"])
+        result = list(grouped.values())
+        for group in result:
+            group["methods"] = sorted(set(group["methods"]))
+            group["method_count"] = len(group["methods"])
+        return sorted(result, key=lambda item: (item["target_date"], item["rank"], item["target_draw_id"]))
+
+    grouped_rank_exact = group_rank_matches(rank_exact)
     recent_start_date = date.fromisoformat(run_date).replace(
         year=date.fromisoformat(run_date).year - 1
     ).isoformat()
     recent_full_exact = [item for item in full_exact if item["target_date"] >= recent_start_date]
     recent_rank_exact = [item for item in rank_exact if item["target_date"] >= recent_start_date]
+    recent_grouped = [item for item in grouped_rank_exact if item["target_date"] >= recent_start_date]
     first_records = next(iter(records_by_method.values()), [])
     rank_count = len(first_records[0]["prediction"]) if first_records else 0
+
+    def rank_summary(matches: list[dict], grouped: list[dict]) -> list[dict]:
+        summary = []
+        for rank in range(1, rank_count + 1):
+            rank_items = [item for item in matches if item["rank"] == rank]
+            rank_groups = [item for item in grouped if item["rank"] == rank]
+            summary.append({
+                "rank": rank,
+                "method_hit_count": len(rank_items),
+                "distinct_draw_rank_hits": len(rank_groups),
+                "distinct_draws_hit": len({item["target_draw_id"] for item in rank_groups}),
+                "distinct_methods_with_exact_match": sorted({item["method"] for item in rank_items}),
+            })
+        return summary
+
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "record_type": "historical_exact_rule_catalog",
         "game": game,
         "generated_for_date_utc": run_date,
@@ -168,32 +208,17 @@ def build_exact_rule_catalog(
             "end_date_inclusive": run_date,
             "full_position_exact_matches": recent_full_exact,
             "rank_exact_matches": recent_rank_exact,
-            "rank_summary": [
-                {
-                    "rank": rank,
-                    "exact_match_count": sum(item["rank"] == rank for item in recent_rank_exact),
-                    "distinct_methods_with_exact_match": sorted({
-                        item["method"] for item in recent_rank_exact if item["rank"] == rank
-                    }),
-                }
-                for rank in range(1, rank_count + 1)
-            ],
+            "rank_matches_grouped_by_draw_and_position": recent_grouped,
+            "rank_summary": rank_summary(recent_rank_exact, recent_grouped),
         },
         "full_position_exact_matches": full_exact,
         "rank_exact_matches": rank_exact,
-        "rank_summary": [
-            {
-                "rank": rank,
-                "exact_match_count": sum(item["rank"] == rank for item in rank_exact),
-                "distinct_methods_with_exact_match": sorted({
-                    item["method"] for item in rank_exact if item["rank"] == rank
-                }),
-            }
-            for rank in range(1, rank_count + 1)
-        ],
+        "rank_matches_grouped_by_draw_and_position": grouped_rank_exact,
+        "rank_summary": rank_summary(rank_exact, grouped_rank_exact),
         "interpretation": (
-            "Keep all exact historical rule hits for later flow analysis. These are in-sample discovery results; "
-            "they do not alone establish prospective predictive power."
+            "Exact historical hits are retained per method. Grouped rank matches count each target draw/rank once "
+            "and list all methods that hit it, preventing method-level hit totals from being mistaken for distinct draws. "
+            "These are in-sample discovery results and do not alone establish prospective predictive power."
         ),
     }
 
