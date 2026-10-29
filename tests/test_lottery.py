@@ -186,7 +186,8 @@ class LotteryDataTests(unittest.TestCase):
         self.assertEqual(len(recent["full_position_exact_matches"]), 0)
         self.assertEqual(len(recent["rank_exact_matches"]), 3)
         self.assertTrue(all(item["method"] == "recent_rank_only" for item in recent["rank_exact_matches"]))
-        self.assertEqual(recent["rank_summary"][0]["exact_match_count"], 1)
+        self.assertEqual(recent["rank_summary"][0]["method_hit_count"], 1)
+        self.assertEqual(recent["rank_summary"][0]["distinct_draw_rank_hits"], 1)
 
     def test_prospective_freeze_records_predictions_and_dataset_hashes(self):
         root = Path(__file__).resolve().parents[1]
