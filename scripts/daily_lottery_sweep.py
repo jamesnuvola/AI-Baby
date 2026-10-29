@@ -146,6 +146,13 @@ def build_exact_rule_catalog(
                     })
     full_exact.sort(key=lambda item: (item["target_date"], item["method"], item["target_draw_id"]))
     rank_exact.sort(key=lambda item: (item["target_date"], item["rank"], item["method"], item["target_draw_id"]))
+    # Prioritize the trailing 12 months in the catalog while retaining the full
+    # historical evidence. The cutoff is explicit and reproducible per run.
+    recent_start_date = date.fromisoformat(run_date).replace(
+        year=date.fromisoformat(run_date).year - 1
+    ).isoformat()
+    recent_full_exact = [item for item in full_exact if item["target_date"] >= recent_start_date]
+    recent_rank_exact = [item for item in rank_exact if item["target_date"] >= recent_start_date]
     first_records = next(iter(records_by_method.values()), [])
     rank_count = len(first_records[0]["prediction"]) if first_records else 0
     return {
@@ -156,6 +163,22 @@ def build_exact_rule_catalog(
         "dataset_path": dataset_path,
         "dataset_sha256": dataset_sha256,
         "rule_count_evaluated": len(records_by_method),
+        "priority_recent_period": {
+            "start_date_inclusive": recent_start_date,
+            "end_date_inclusive": run_date,
+            "full_position_exact_matches": recent_full_exact,
+            "rank_exact_matches": recent_rank_exact,
+            "rank_summary": [
+                {
+                    "rank": rank,
+                    "exact_match_count": sum(item["rank"] == rank for item in recent_rank_exact),
+                    "distinct_methods_with_exact_match": sorted({
+                        item["method"] for item in recent_rank_exact if item["rank"] == rank
+                    }),
+                }
+                for rank in range(1, rank_count + 1)
+            ],
+        },
         "full_position_exact_matches": full_exact,
         "rank_exact_matches": rank_exact,
         "rank_summary": [
