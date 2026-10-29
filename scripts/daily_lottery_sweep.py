@@ -227,15 +227,9 @@ def sweep_game(csv_path: str, game: str, run_date: str, minimum_history: int = 1
     draws = load_draws_csv(csv_path, game=game)
     if len(draws) <= minimum_history:
         raise ValueError(f"not enough {game} draws for minimum_history={minimum_history}")
-    # Bound daily runtime while preserving a meaningful rolling-origin window.
-    # Keep 100 pre-2022 draws as warm-up, then score target draws from 2022 onward.
-    first_target_index = next(
-        (i for i, draw in enumerate(draws) if draw.draw_date.isoformat() >= "2022-01-01"),
-        None,
-    )
-    if first_target_index is None or first_target_index < minimum_history:
-        raise ValueError(f"not enough pre-2022 warm-up history for {game}")
-    draws = draws[first_target_index - minimum_history:]
+    # Use the complete available dataset. The rolling-origin evaluator itself
+    # reserves the initial minimum_history draws as warm-up, then scores every
+    # subsequent target; do not silently omit older target draws.
     rules = GAME_RULES[game]
     methods = parameter_grid(run_date)
     results = {}
