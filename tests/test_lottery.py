@@ -161,13 +161,13 @@ class LotteryDataTests(unittest.TestCase):
         exact = catalog["full_position_exact_matches"][0]
         self.assertEqual(exact["method"], "poor_average_but_exact_once")
         self.assertEqual(exact["target_draw_id"], "d1")
-        self.assertEqual(len(catalog["rank_exact_matches"]), 6)
+        self.assertEqual(len(catalog["rank_exact_matches"]), 9)
         rank_one = [item for item in catalog["rank_exact_matches"] if item["rank"] == 1]
-        self.assertEqual(len(rank_one), 2)
+        self.assertEqual(len(rank_one), 3)
         self.assertTrue(all(item["predicted_number"] == item["actual_number"] == 1 for item in rank_one))
         self.assertTrue(all(item["full_ticket_also_exact"] for item in catalog["rank_exact_matches"] if item["method"] == "poor_average_but_exact_once" and item["target_draw_id"] == "d1"))
         self.assertEqual(catalog["dataset_sha256"], "a" * 64)
-        self.assertEqual(catalog["rank_summary"][0]["exact_match_count"], 2)
+        self.assertEqual(catalog["rank_summary"][0]["exact_match_count"], 3)
         self.assertEqual(catalog["priority_recent_period"]["start_date_inclusive"], "2025-10-28")
         recent = catalog["priority_recent_period"]
         self.assertEqual(len(recent["full_position_exact_matches"]), 0)
