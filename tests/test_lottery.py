@@ -189,6 +189,27 @@ class LotteryDataTests(unittest.TestCase):
         self.assertEqual(recent["rank_summary"][0]["method_hit_count"], 1)
         self.assertEqual(recent["rank_summary"][0]["distinct_draw_rank_hits"], 1)
 
+    def test_exact_catalog_recent_window_handles_leap_day(self):
+        records = {
+            "fixture": [{
+                "target_draw_id": "d1",
+                "target_date": "2027-02-28",
+                "history_size": 100,
+                "prediction": [1, 2, 3, 4, 5],
+                "actual": [1, 2, 3, 4, 5],
+                "hits": 5,
+            }]
+        }
+        catalog = build_exact_rule_catalog(
+            "vincicasa", records, "2028-02-29", "fixture.csv", "b" * 64
+        )
+        self.assertEqual(
+            catalog["priority_recent_period"]["start_date_inclusive"], "2027-02-28"
+        )
+        self.assertEqual(
+            len(catalog["priority_recent_period"]["full_position_exact_matches"]), 1
+        )
+
     def test_prospective_freeze_records_predictions_and_dataset_hashes(self):
         root = Path(__file__).resolve().parents[1]
         with tempfile.TemporaryDirectory() as tmp:
