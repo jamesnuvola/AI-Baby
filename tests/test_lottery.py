@@ -142,6 +142,16 @@ class LotteryDataTests(unittest.TestCase):
                     "hits": 1,
                 },
             ],
+            "recent_rank_only": [
+                {
+                    "target_draw_id": "d3",
+                    "target_date": "2026-02-01",
+                    "history_size": 150,
+                    "prediction": [7, 2, 9, 10, 11],
+                    "actual": [7, 8, 9, 10, 12],
+                    "hits": 1,
+                },
+            ],
         }
         catalog = build_exact_rule_catalog(
             "vincicasa", records, "2026-10-28", "fixture.csv", "a" * 64
@@ -151,13 +161,33 @@ class LotteryDataTests(unittest.TestCase):
         exact = catalog["full_position_exact_matches"][0]
         self.assertEqual(exact["method"], "poor_average_but_exact_once")
         self.assertEqual(exact["target_draw_id"], "d1")
-        self.assertEqual(len(catalog["rank_exact_matches"]), 6)
+        self.assertEqual(len(catalog["rank_exact_matches"]), 9)
         rank_one = [item for item in catalog["rank_exact_matches"] if item["rank"] == 1]
-        self.assertEqual(len(rank_one), 2)
+        self.assertEqual(len(rank_one), 3)
         self.assertTrue(all(item["predicted_number"] == item["actual_number"] == 1 for item in rank_one))
         self.assertTrue(all(item["full_ticket_also_exact"] for item in catalog["rank_exact_matches"] if item["method"] == "poor_average_but_exact_once" and item["target_draw_id"] == "d1"))
         self.assertEqual(catalog["dataset_sha256"], "a" * 64)
-        self.assertEqual(catalog["rank_summary"][0]["exact_match_count"], 2)
+        self.assertEqual(catalog["schema_version"], 2)
+        self.assertEqual(catalog["rank_summary"][0]["method_hit_count"], 3)
+        self.assertEqual(catalog["rank_summary"][0]["distinct_draw_rank_hits"], 2)
+        self.assertEqual(catalog["rank_summary"][0]["distinct_draws_hit"], 2)
+        grouped_rank_one = [item for item in catalog["rank_matches_grouped_by_draw_and_position"] if item["rank"] == 1]
+        self.assertEqual(len(grouped_rank_one), 2)
+        self.assertEqual(
+            next(item for item in grouped_rank_one if item["target_draw_id"] == "d1")["method_count"],
+            2,
+        )
+        self.assertEqual(
+            next(item for item in grouped_rank_one if item["target_draw_id"] == "d1")["methods"],
+            ["poor_average_but_exact_once", "rank_one_only"],
+        )
+        self.assertEqual(catalog["priority_recent_period"]["start_date_inclusive"], "2025-10-28")
+        recent = catalog["priority_recent_period"]
+        self.assertEqual(len(recent["full_position_exact_matches"]), 0)
+        self.assertEqual(len(recent["rank_exact_matches"]), 3)
+        self.assertTrue(all(item["method"] == "recent_rank_only" for item in recent["rank_exact_matches"]))
+        self.assertEqual(recent["rank_summary"][0]["method_hit_count"], 1)
+        self.assertEqual(recent["rank_summary"][0]["distinct_draw_rank_hits"], 1)
 
     def test_prospective_freeze_records_predictions_and_dataset_hashes(self):
         root = Path(__file__).resolve().parents[1]
