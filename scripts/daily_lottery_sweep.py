@@ -172,8 +172,13 @@ def build_exact_rule_catalog(
         return sorted(result, key=lambda item: (item["target_date"], item["rank"], item["target_draw_id"]))
 
     grouped_rank_exact = group_rank_matches(rank_exact)
-    recent_start_date = date.fromisoformat(run_date).replace(
-        year=date.fromisoformat(run_date).year - 1
+    run_day = date.fromisoformat(run_date)
+    # Clamp leap day to February 28 when the trailing-year boundary falls
+    # in a non-leap year; date.replace(year=...) would otherwise raise.
+    previous_year = run_day.year - 1
+    recent_start_day = min(run_day.day, 28) if run_day.month == 2 and run_day.day == 29 else run_day.day
+    recent_start_date = run_day.replace(
+        year=previous_year, day=recent_start_day
     ).isoformat()
     recent_full_exact = [item for item in full_exact if item["target_date"] >= recent_start_date]
     recent_rank_exact = [item for item in rank_exact if item["target_date"] >= recent_start_date]
