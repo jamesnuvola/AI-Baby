@@ -156,7 +156,7 @@ class LotteryDataTests(unittest.TestCase):
         catalog = build_exact_rule_catalog(
             "vincicasa", records, "2026-10-28", "fixture.csv", "a" * 64
         )
-        self.assertEqual(catalog["rule_count_evaluated"], 2)
+        self.assertEqual(catalog["rule_count_evaluated"], 3)
         self.assertEqual(len(catalog["full_position_exact_matches"]), 1)
         exact = catalog["full_position_exact_matches"][0]
         self.assertEqual(exact["method"], "poor_average_but_exact_once")
