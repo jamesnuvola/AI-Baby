@@ -164,7 +164,7 @@ class LotteryDataTests(unittest.TestCase):
         self.assertEqual(len(catalog["rank_exact_matches"]), 9)
         rank_one = [item for item in catalog["rank_exact_matches"] if item["rank"] == 1]
         self.assertEqual(len(rank_one), 3)
-        self.assertTrue(all(item["predicted_number"] == item["actual_number"] == 1 for item in rank_one))
+        self.assertEqual({item["target_draw_id"]: (item["predicted_number"], item["actual_number"]) for item in rank_one}, {"d1": (1, 1), "d3": (7, 7)})
         self.assertTrue(all(item["full_ticket_also_exact"] for item in catalog["rank_exact_matches"] if item["method"] == "poor_average_but_exact_once" and item["target_draw_id"] == "d1"))
         self.assertEqual(catalog["dataset_sha256"], "a" * 64)
         self.assertEqual(catalog["schema_version"], 2)
