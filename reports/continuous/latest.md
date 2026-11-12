@@ -1,6 +1,6 @@
-# Daily variable sweep — 2026-11-11
+# Daily variable sweep — 2026-11-12
 
-Generated: 2026-11-11T11:55:04.304896+00:00
+Generated: 2026-11-12T12:49:00.562817+00:00
 
 **Status:** exploratory. No method is promoted automatically.
 
@@ -14,16 +14,17 @@ Scored targets: 927; history starts 2021-05-13; first target 2022-01-03; latest 
 |---|---:|---:|---:|---:|---:|
 | anti_hot_window10 | 0.4164 | 0.4385 | 0.4263 | 0.0115 | 38.289 |
 | gap_neighbours5 | 0.4347 | 0.4385 | 0.4447 | 0.0236 | 15.714 |
+| daily_anti_hot_window225 | 0.4132 | 0.4359 | 0.3921 | 0.0248 | 16.280 |
 | position_decoder_neighbours20 | 0.4239 | 0.4333 | 0.4342 | 0.0289 | 14.353 |
 | gap_neighbours10 | 0.4153 | 0.4333 | 0.4211 | 0.0271 | 14.791 |
-| daily_anti_hot_window218 | 0.4142 | 0.4231 | 0.4053 | 0.0270 | 16.231 |
 | transition_overlap2_power3 | 0.3883 | 0.4205 | 0.3789 | 0.0245 | 15.755 |
+| daily_transition_overlap1_power8 | 0.3873 | 0.4179 | 0.3553 | 0.0223 | 15.041 |
 | global_frequency | 0.3948 | 0.4154 | 0.3816 | 0.0266 | 13.649 |
 | position_decoder_neighbours60 | 0.4153 | 0.4154 | 0.4237 | 0.0288 | 14.062 |
 | exponential_decay_tau20 | 0.3981 | 0.4128 | 0.3658 | 0.0227 | 15.007 |
-| daily_position_decoder_neighbours176 | 0.4035 | 0.4128 | 0.3974 | 0.0280 | 13.955 |
+| daily_position_decoder_neighbours177 | 0.4045 | 0.4128 | 0.4000 | 0.0280 | 13.958 |
 | position_decoder_neighbours120 | 0.4067 | 0.4103 | 0.4105 | 0.0284 | 13.967 |
-| daily_transition_overlap4_power7 | 0.3883 | 0.4077 | 0.3789 | 0.0257 | 13.811 |
+| daily_trajectory_window3_neighbours81 | 0.3830 | 0.4103 | 0.3658 | 0.0318 | 12.716 |
 | exponential_decay_tau5 | 0.3959 | 0.4051 | 0.3816 | 0.0261 | 15.025 |
 | transition_overlap1_power3 | 0.3786 | 0.4051 | 0.3500 | 0.0205 | 14.921 |
 | transition_overlap2_power1 | 0.3873 | 0.4051 | 0.3605 | 0.0225 | 15.638 |
@@ -32,20 +33,19 @@ Scored targets: 927; history starts 2021-05-13; first target 2022-01-03; latest 
 | trajectory_window3_neighbours40 | 0.3754 | 0.4000 | 0.3737 | 0.0302 | 12.866 |
 | random_uniform_seed0 | 0.4337 | 0.4000 | 0.4447 | 0.0266 | 14.967 |
 | transition_overlap2_power2 | 0.3808 | 0.4000 | 0.3684 | 0.0212 | 15.626 |
-| daily_recent_window232 | 0.3732 | 0.3974 | 0.3474 | 0.0252 | 15.528 |
-| daily_gap_neighbours132 | 0.3991 | 0.3974 | 0.3816 | 0.0219 | 14.611 |
 | transition_overlap1_power1 | 0.3722 | 0.3949 | 0.3211 | 0.0252 | 14.326 |
 | transition_overlap1_power2 | 0.3765 | 0.3949 | 0.3342 | 0.0237 | 14.545 |
+| daily_gap_neighbours133 | 0.3970 | 0.3949 | 0.3816 | 0.0223 | 14.652 |
 | recent_frequency_window10 | 0.3937 | 0.3923 | 0.3737 | 0.0200 | 19.867 |
 | exponential_decay_tau40 | 0.3959 | 0.3923 | 0.3921 | 0.0239 | 14.697 |
 | transition_overlap3_power1 | 0.3873 | 0.3923 | 0.3789 | 0.0216 | 18.109 |
 | transition_overlap3_power2 | 0.3883 | 0.3923 | 0.3816 | 0.0218 | 18.106 |
 | transition_overlap3_power3 | 0.3883 | 0.3923 | 0.3816 | 0.0219 | 18.099 |
-| daily_exponential_decay_tau12 | 0.3948 | 0.3923 | 0.3684 | 0.0228 | 14.957 |
-| daily_trajectory_window8_neighbours78 | 0.4002 | 0.3923 | 0.4289 | 0.0325 | 12.738 |
+| daily_recent_window233 | 0.3732 | 0.3923 | 0.3526 | 0.0254 | 15.495 |
 | recent_frequency_window80 | 0.3894 | 0.3872 | 0.3711 | 0.0241 | 15.262 |
 | exponential_decay_tau10 | 0.3981 | 0.3872 | 0.3737 | 0.0236 | 14.942 |
 | gap_neighbours20 | 0.4067 | 0.3872 | 0.3947 | 0.0252 | 15.017 |
+| daily_exponential_decay_tau13 | 0.3959 | 0.3872 | 0.3737 | 0.0223 | 15.047 |
 | recent_frequency_window20 | 0.3937 | 0.3667 | 0.4158 | 0.0212 | 17.695 |
 | trajectory_window5_neighbours60 | 0.3819 | 0.3615 | 0.4105 | 0.0302 | 12.737 |
 | overdue_first | 0.3851 | 0.3615 | 0.3947 | 0.0223 | 15.903 |
@@ -62,14 +62,14 @@ Scored targets: 1761; history starts 2021-09-23; first target 2022-01-01; latest
 | overdue_first | 0.6349 | 0.6689 | 0.6075 | 0.0584 | 6.844 |
 | gap_neighbours5 | 0.6616 | 0.6607 | 0.6827 | 0.0564 | 7.090 |
 | transition_overlap2_power3 | 0.6553 | 0.6594 | 0.6406 | 0.0560 | 6.907 |
-| daily_trajectory_window8_neighbours78 | 0.6354 | 0.6594 | 0.6256 | 0.0753 | 5.856 |
 | random_uniform_seed0 | 0.6337 | 0.6539 | 0.6331 | 0.0562 | 6.848 |
 | transition_overlap2_power2 | 0.6468 | 0.6512 | 0.6331 | 0.0560 | 6.864 |
-| daily_position_decoder_neighbours176 | 0.6547 | 0.6471 | 0.6602 | 0.0719 | 6.066 |
-| daily_recent_window232 | 0.6496 | 0.6457 | 0.6767 | 0.0552 | 6.805 |
+| daily_position_decoder_neighbours177 | 0.6547 | 0.6471 | 0.6602 | 0.0719 | 6.069 |
 | trajectory_window8_neighbours80 | 0.6303 | 0.6443 | 0.6301 | 0.0747 | 5.865 |
 | transition_overlap1_power3 | 0.6468 | 0.6443 | 0.6466 | 0.0559 | 6.894 |
+| daily_transition_overlap1_power8 | 0.6462 | 0.6443 | 0.6526 | 0.0543 | 6.878 |
 | position_decoder_neighbours120 | 0.6564 | 0.6430 | 0.6662 | 0.0713 | 6.093 |
+| daily_recent_window233 | 0.6479 | 0.6416 | 0.6737 | 0.0550 | 6.827 |
 | transition_overlap3_power1 | 0.6354 | 0.6402 | 0.6331 | 0.0478 | 7.918 |
 | position_decoder_neighbours20 | 0.6519 | 0.6389 | 0.6617 | 0.0672 | 6.351 |
 | transition_overlap3_power2 | 0.6354 | 0.6389 | 0.6346 | 0.0479 | 7.916 |
@@ -80,23 +80,23 @@ Scored targets: 1761; history starts 2021-09-23; first target 2022-01-01; latest
 | gap_neighbours40 | 0.6377 | 0.6306 | 0.6617 | 0.0542 | 6.886 |
 | position_decoder_neighbours60 | 0.6468 | 0.6252 | 0.6586 | 0.0693 | 6.217 |
 | anti_hot_window40 | 0.6258 | 0.6252 | 0.6105 | 0.0482 | 7.628 |
+| daily_anti_hot_window225 | 0.6326 | 0.6252 | 0.6602 | 0.0541 | 7.276 |
 | transition_overlap1_power2 | 0.6383 | 0.6224 | 0.6406 | 0.0541 | 6.889 |
-| daily_anti_hot_window218 | 0.6315 | 0.6197 | 0.6737 | 0.0519 | 7.310 |
 | trajectory_window3_neighbours40 | 0.6303 | 0.6183 | 0.6316 | 0.0689 | 5.869 |
 | anti_hot_window10 | 0.6195 | 0.6183 | 0.6301 | 0.0368 | 10.905 |
+| daily_gap_neighbours133 | 0.6195 | 0.6156 | 0.6150 | 0.0519 | 6.877 |
 | gap_neighbours10 | 0.6474 | 0.6129 | 0.6812 | 0.0580 | 6.876 |
-| daily_gap_neighbours132 | 0.6212 | 0.6129 | 0.6195 | 0.0520 | 6.913 |
+| daily_trajectory_window3_neighbours81 | 0.6133 | 0.6129 | 0.6045 | 0.0702 | 5.839 |
 | recent_frequency_window80 | 0.6326 | 0.6088 | 0.6842 | 0.0546 | 7.163 |
 | transition_overlap1_power1 | 0.6337 | 0.6074 | 0.6677 | 0.0587 | 6.970 |
 | gap_neighbours20 | 0.6337 | 0.5923 | 0.6662 | 0.0572 | 6.929 |
 | recent_frequency_window10 | 0.5928 | 0.5910 | 0.6015 | 0.0445 | 7.722 |
 | recent_frequency_window20 | 0.6053 | 0.5896 | 0.6301 | 0.0500 | 7.385 |
 | exponential_decay_tau10 | 0.6133 | 0.5896 | 0.6361 | 0.0526 | 7.062 |
-| daily_exponential_decay_tau12 | 0.6133 | 0.5855 | 0.6391 | 0.0527 | 7.063 |
 | recent_frequency_window40 | 0.6070 | 0.5841 | 0.6391 | 0.0520 | 7.244 |
+| daily_exponential_decay_tau13 | 0.6122 | 0.5814 | 0.6436 | 0.0525 | 7.051 |
 | exponential_decay_tau40 | 0.6167 | 0.5800 | 0.6481 | 0.0519 | 7.103 |
 | exponential_decay_tau5 | 0.5928 | 0.5691 | 0.6015 | 0.0493 | 7.093 |
 | global_frequency | 0.6144 | 0.5677 | 0.6632 | 0.0587 | 6.758 |
 | exponential_decay_tau20 | 0.6031 | 0.5636 | 0.6481 | 0.0507 | 7.053 |
-| daily_transition_overlap4_power7 | 0.6019 | 0.5622 | 0.6421 | 0.0575 | 6.855 |
 
