@@ -300,3 +300,11 @@
 - **fibonacci** — frozen budget 1000; mean test MAE 0; worst-seed MAE 0; next: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
 - **geometric** — frozen budget 1000; mean test MAE 0; worst-seed MAE 0; next: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
 - **cubic_diagnostic** — frozen budget 1000; mean test MAE 0; worst-seed MAE 0; next: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
+
+## Run 45-attempt-1 — 2026-11-24T16:18:49.976727+00:00
+
+- **linear** — frozen budget 1000; mean test MAE 0; worst-seed MAE 0; next: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
+- **quadratic** — frozen budget 1000; mean test MAE 0; worst-seed MAE 0; next: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
+- **fibonacci** — frozen budget 1000; mean test MAE 0; worst-seed MAE 0; next: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
+- **geometric** — frozen budget 1000; mean test MAE 0; worst-seed MAE 0; next: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
+- **cubic_diagnostic** — frozen budget 1000; mean test MAE 0; worst-seed MAE 0; next: Extend to more seeds and real-world datasets; synthetic results alone do not establish generalization.
